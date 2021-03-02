@@ -1,0 +1,55 @@
+;; Copyright © 2021 Atomist, Inc.
+;;
+;; Licensed under the Apache License, Version 2.0 (the "License");
+;; you may not use this file except in compliance with the License.
+;; You may obtain a copy of the License at
+;;
+;;     http://www.apache.org/licenses/LICENSE-2.0
+;;
+;; Unless required by applicable law or agreed to in writing, software
+;; distributed under the License is distributed on an "AS IS" BASIS,
+;; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+;; See the License for the specific language governing permissions and
+;; limitations under the License.
+
+{:namespace "atomist"
+ :homepageUrl "https://github.com/atomist-skills/ecr-integration"
+ :name "ecr-integration"
+ :displayName "Elastic Container Registry Integration"
+ :description "This section supports markdown"
+ :author "atomist"
+ :license "unknown"
+ :iconUrl "https://images.atomist.com/rug/atomist.png"
+ :integration true
+ :capabilities 
+ {:provides
+  [{:name "DockerRegistry"
+    :namespace "atomist"}]}
+ :parameters [{:webhook
+               {:name "ecr",
+                :displayName "ECR Push Webhook",
+                :description "Ingest events from Docker Hub"
+                :required false}}
+              {:secret
+               {:name "creds"
+                :displayName "AWS Access Key"
+                :description "AWS Access Key"
+                :minRequired 0
+                :maxAllowed 1
+                :required false}}
+              {:string
+               {:name "docker-id"
+                :displayName "Docker ID"
+                :description "The Docker ID for your Docker Hub user account"
+                :required true}}
+              {:schedule
+               {:description "Fetch updates to tags in use from Dockerhub",
+                :displayName "Cron Schedule",
+                :name "refresh-tags",
+                :required false}}]
+ :artifacts {:gcf
+             [{:name "ecr-integration",
+               :runtime "nodejs10",
+               :memory 512,
+               :timeout 60,
+               :entryPoint "eventhandler"}]}}

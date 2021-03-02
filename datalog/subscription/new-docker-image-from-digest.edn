@@ -1,0 +1,23 @@
+[:find
+ (pull ?docker-image [:docker.image/digest
+                      {:docker.image/layers [:docker.image.layer/ordinal
+                                             {:docker.image.layer/blob [:docker.image.blob/digest]}]}
+                      {:docker.image/repository [:docker.repository/host
+                                                 :docker.repository/repository]}])
+ (pull ?from-line [:docker.file.from/tag
+                   :docker.file.from/digest
+                   {:docker.file.from/repository [*]}])
+ (pull ?docker-file [:docker.file/sha
+                     :docker.file/path])
+ :in $ $before-db %
+ :where
+ (tx-entity-attr-value :docker.image/layers ?docker-image _)
+ [?docker-image :docker.image/sha ?commit-sha]
+ [?commit :git.commit/sha ?commit-sha]
+ [?docker-file :docker.file/commits ?commit]
+ [?from-line :docker.file.line/file ?docker-file]
+ [?from-line :docker.file.line/instruction "FROM"]
+ [?from-line :docker.file.from/repository ?repository]
+ [?repository :docker.repository/host "hub.docker.com"]
+ [?from-line :docker.file.from/digest _]
+ [(missing? $ ?from-line :docker.file.from/tag)]]

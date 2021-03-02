@@ -1,0 +1,4 @@
+[:find ?parameter
+ :in $ $before-db %
+ :where
+ (tx-config ?parameter)]
