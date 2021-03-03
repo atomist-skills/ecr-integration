@@ -45,7 +45,7 @@
          ;; docker hub notifications should be verified before being sent as the webhook can not be verified
 
          (when (and repo_name tag)
-           (doseq [manifest (<? (dockerhub/get-labelled-manifests
+           (doseq [manifest (<? (ecr/get-labelled-manifests
                                  repo_name
                                  tag
                                  docker-id
