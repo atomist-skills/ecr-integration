@@ -23,41 +23,34 @@
             [goog.string :as gstring]
             [atomist.docker :as docker]))
 
-(enable-console-print!)
-
-(defn add-creds-if-present [handler]
-  (fn [request]
-    (api/trace (gstring/format "add-creds-if-present %s" (:creds request)))
-    (go-safe
-     (<? (handler (assoc request :atomist/docker-hub-creds (:creds request)))))))
-
 (defn transact-webhook [handler]
-  (fn [{:as request :keys [docker-id] :atomist/keys [docker-hub-creds]}]
+  (fn [{:as request :keys [docker-id] :atomist/keys [ecr-creds]}]
     (api/trace "transact-webhook")
     (go-safe
      (try
-       (let [{:as data :keys [callback_url] {:keys [tag]} :push_data {:keys [repo_name]} :repository}
+       (let [{:as data
+              :keys [source]
+              {:keys [result repository-name image-digest action-type image-tag]} :detail}
              (-> request
                  :webhook
                  :body
                  (json/->obj))]
-         (log/infof "docker hub event data %s" data)
+         (log/infof "ecr event data %s" data)
          ;; docker hub notifications should be verified before being sent as the webhook can not be verified
 
-         (when (and repo_name tag)
+         (when (and repository-name image-tag)
            (doseq [manifest (<? (ecr/get-labelled-manifests
-                                 repo_name
-                                 tag
-                                 docker-id
-                                 docker-hub-creds))]
+                                 request
+                                 repository-name
+                                 image-tag))]
 
              (<? (api/transact
                   request
-                  (docker/->image-layers-entities "hub.docker.com" repo_name manifest tag)))))
+                  (docker/->image-layers-entities "hub.docker.com" repository-name manifest image-tag)))))
          (<? (handler (assoc request
                              :atomist/status
                              {:code 0
-                              :reason (gstring/format "transact webhook for %s/%s" repo_name tag)}))))
+                              :reason (gstring/format "transact webhook for %s/%s" repository-name image-tag)}))))
        (catch :default ex
          (log/errorf ex "failed to transact")
          (assoc request
@@ -75,7 +68,7 @@
                                                                 "registry.hub.docker.com/%s"
                                                                 (get params "namespace" "library"))
                                    :docker.registry/secret (get params "creds")
-                                   :docker.registry/type :docker.registry.type/DOCKER_HUB
+                                   :docker.registry/type :docker.registry.type/ECR
                                    :atomist.skill.configuration.capability.provider/name "DockerRegistry"
                                    :atomist.skill.configuration.capability.provider/namespace "atomist"}]))
        (<? (handler (assoc request
@@ -89,7 +82,7 @@
   (go-safe
    (let [digests (set digests)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (when-let [manifests (not-empty (<? (dockerhub/get-labelled-manifests repository tag)))]
+     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
        (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
        (doseq [manifest manifests
                :let [new-digest (:digest manifest)]]
@@ -105,7 +98,7 @@
   (go-safe
    (let [repository (-> image :docker.image/repository :docker.repository/repository)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (when-let [manifests (not-empty (<? (dockerhub/get-labelled-manifests repository tag)))]
+     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
        (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
        (doseq [manifest manifests
                :let [new-digest (:digest manifest)]]
@@ -132,7 +125,7 @@
 
 (defn transact-from-tagged-image
   [handler]
-  (fn [{:keys [docker-id] :as request :atomist/keys [docker-hub-creds]}]
+  (fn [{:as request}]
     (go-safe
      (try
        (let [parent-image (-> request :subscription :result first first)
@@ -148,7 +141,7 @@
                                  :schema/entity "$docker-file"
                                  :docker.file/path (:docker.file/path docker-file)
                                  :docker.file/sha (:docker.file/sha docker-file)}
-             manifests (not-empty (<? (dockerhub/get-labelled-manifests repository tag docker-id docker-hub-creds)))
+             manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))
              image-str (str repository ":" tag)]
 
          (if manifests
@@ -186,7 +179,7 @@
 
 (defn transact-from-digest-image
   [handler]
-  (fn [{:keys [docker-id] :as request :atomist/keys [docker-hub-creds]}]
+  (fn [{:as request}]
     (go-safe
      (try
        (let [parent-image (-> request :subscription :result first first)
@@ -202,7 +195,7 @@
                                  :schema/entity "$docker-file"
                                  :docker.file/path (:docker.file/path docker-file)
                                  :docker.file/sha (:docker.file/sha docker-file)}
-             manifests (not-empty (<? (dockerhub/get-labelled-manifests repository digest docker-id docker-hub-creds)))
+             manifests (not-empty (<? (ecr/get-labelled-manifests request repository digest)))
              image-str (str repository ":" digest)]
 
          (if manifests
@@ -248,23 +241,17 @@
 
                          :new-docker-image-from-tag.edn (-> (api/finished)
                                                             (transact-from-tagged-image)
-                                                            (add-creds-if-present)
-                                                            (api/add-resource-providers)
-                                                            (api/add-skill-config))
+                                                            (api/add-resource-providers))
 
                          :new-docker-image-from-digest.edn (-> (api/finished)
                                                                (transact-from-digest-image)
-                                                               (add-creds-if-present)
-                                                               (api/add-resource-providers)
-                                                               (api/add-skill-config))
+                                                               (api/add-resource-providers))
 
                          :docker-refresh-tags-schedule.edn (-> (api/finished)
-                                                               (refresh-images)
-                                                               (add-creds-if-present))
+                                                               (refresh-images))
 
                          :default (-> (api/finished)
-                                      (transact-webhook)
-                                      (add-creds-if-present))})
+                                      (transact-webhook))})
        (api/add-skill-config)
        (api/log-event)
        (api/status))))

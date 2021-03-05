@@ -21,7 +21,7 @@
  :license "unknown"
  :iconUrl "https://images.atomist.com/rug/atomist.png"
  :integration true
- :capabilities 
+ :capabilities
  {:provides
   [{:name "DockerRegistry"
     :namespace "atomist"}]}
@@ -30,17 +30,35 @@
                 :displayName "ECR Push Webhook",
                 :description "Ingest events from Docker Hub"
                 :required false}}
+              {:singleChoice
+               {:name "region"
+                :displayName "AWS Region"
+                :description "AWS Regtion"
+                :options
+                [{:description "us-east-1"
+                  :value "us-east-1"
+                  :text "us-east-1"}]
+                :required true}}
               {:secret
-               {:name "creds"
-                :displayName "AWS Access Key"
-                :description "AWS Access Key"
-                :minRequired 0
+               {:name "account-id"
+                :displayName "AWS Account ID"
+                :description "AWS Account ID"
+                :minRequired 1
                 :maxAllowed 1
-                :required false}}
-              {:string
-               {:name "docker-id"
-                :displayName "Docker ID"
-                :description "The Docker ID for your Docker Hub user account"
+                :required true}}
+              {:secret
+               {:name "access-key-id"
+                :displayName "AWS Access Key ID"
+                :description "AWS Access Key ID"
+                :minRequired 1
+                :maxAllowed 1
+                :required true}}
+              {:secret
+               {:name "secret-access-key"
+                :displayName "AWS Secret Access Key"
+                :description "AWS Secret Access Key"
+                :minRequired 1
+                :maxAllowed 1
                 :required true}}
               {:schedule
                {:description "Fetch updates to tags in use from Dockerhub",

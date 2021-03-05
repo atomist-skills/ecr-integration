@@ -20,63 +20,70 @@
    [cljs.pprint :refer [pprint]]
    [atomist.cljs-log :as log]
    [atomist.async :refer-macros [go-safe <?]]
+   [cljs.core.async :refer [go chan <! >!]]
    [clojure.string :as str]
-   [atomist.docker :as docker]))
+   [atomist.docker :as docker]
+   [cljs-node-io.core :as io]
+   ["@aws-sdk/client-ecr" :as ecr-service]
+   ["aws-sdk" :as aws-sdk]
+   [atomist.json :as json]))
 
 (enable-console-print!)
 
-(def auth-url "https://auth.docker.io/token")
-(def domain "registry-1.docker.io")
+(defn account-host 
+  [account-id region] 
+  (gstring/format "%s.dkr.ecr.%s.amazonaws.com" account-id region))
 
-(defn dockerhub-auth
-  [{:keys [repository username api-key]}]
+(defn ecr-auth
+  [{:keys [region access-key-id secret-access-key]}]
   (go-safe
-   (when (and username api-key)
-     (log/infof "Authenticating using username and api-key")
-     (let [response (<? (client/post auth-url
-                                     {:form-params {:service "registry.docker.io"
-                                                    :client_id "Atomist"
-                                                    :grant_type "password"
-                                                    :username username
-                                                    :password api-key
-                                                    :scope (gstring/format "repository:%s:pull" repository)}}))]
-       (if (= 200 (:status response))
-         {:access-token (-> response :body :access_token)}
-         (throw (ex-info (gstring/format "unable to auth %s" auth-url) response)))))))
+   (log/infof "Authenticating GCR in region %s" region)
+   (try
+     (let [token-chan (chan)
+           client (new (.-ECRClient ecr-service) #js {:region region
+                                                      :credentials (.. aws-sdk -config -credentials)})]
+       ;; write to in-memory file-system for GCF and remove when complete
+       (io/spit "creds.json" (-> {:region region
+                                  :accessKeyId access-key-id
+                                  :secretAccessKey secret-access-key}
+                                 (json/->str)))
+       (.loadFromPath (.. aws-sdk -config) "creds.json")
+     ;; Send AWS GetAuthorizationTokenCommand
+       (.catch
+        (.then
+         (.send client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
+         (fn [data] (go (>! token-chan (-> data
+                                           (. -authorizationData)
+                                           (aget 0)
+                                           (. -authorizationToken))))))
+        (fn [err] (go (>! token-chan (ex-info "failed to create token" {:err err})))))
+       {:access-token (<? token-chan)})
+     (catch :default ex
+       (println "inner error " ex)
+       (throw ex))
+     (finally
+       (io/delete-file "creds.json")))))
 
-(defn dockerhub-anonymous-auth
-  [{:keys [repository username api-key]}]
+(comment
   (go-safe
-   (when (not (and username api-key))
-     (log/infof "Attempting anonymous auth for %s" repository)
-     (let [repository (if (str/includes? repository "/") repository (str "library/" repository))
-           response (<? (client/get (gstring/format "https://auth.docker.io/token?service=registry.docker.io&scope=repository:%s:pull" repository)))]
-       (if (= 200 (:status response))
-         {:access-token (-> response :body :token)
-          :repository repository}
-         (throw (ex-info (gstring/format "unable to auth %s" auth-url) response)))))))
-
-(defn run-tasks [m & ts]
-  (go-safe
-   (loop [context m tasks ts]
-     (if-let [task (first tasks)]
-       (recur (merge context (<? (task context))) (rest tasks))
-       context))))
+   (try
+     (def x (<? (ecr-auth {:access-key-id "xxxxxx"
+                           :secret-access-key "xxxxxxx"
+                           :region "us-east-1"})))
+     (println "success: " x)
+     (catch :default ex
+       (println "error:  " ex)))))
 
 (defn get-labelled-manifests
   "log error or return labels"
-  ([repository tag-or-digest]
-   (get-labelled-manifests repository tag-or-digest nil nil))
-  ([repository tag-or-digest username api-key]
-   (log/infof "get-image-info:  %s@%s/%s" (or username "anonymous") repository tag-or-digest)
-   (go-safe
-    (let [auth-context (<? (run-tasks
-                            {:repository repository
-                             :tag tag-or-digest
-                             :username username
-                             :api-key api-key}
-                            dockerhub-auth
-                            dockerhub-anonymous-auth))]
-      (<? (docker/get-labelled-manifests domain (:access-token auth-context) (or (:repository auth-context) repository) tag-or-digest))))))
+  [{:keys [account-id region access-key-id secret-access-key]} repository tag-or-digest]
+  (log/infof "get-image-info:  %s@%s/%s" region access-key-id tag-or-digest)
+  (go-safe
+   (let [auth-context (<? (ecr-auth {:region region
+                                     :secret-access-key secret-access-key
+                                     :access-key-id access-key-id}))]
+     (<? (docker/get-labelled-manifests
+          (account-host account-id region)
+          (:access-token auth-context) repository tag-or-digest)))))
 
 
