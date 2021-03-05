@@ -30,8 +30,8 @@
 
 (enable-console-print!)
 
-(defn account-host 
-  [account-id region] 
+(defn account-host
+  [account-id region]
   (gstring/format "%s.dkr.ecr.%s.amazonaws.com" account-id region))
 
 (defn ecr-auth
