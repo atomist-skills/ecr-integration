@@ -116,7 +116,7 @@
 (defn get-labelled-manifests
   "log error or return labels"
   [{:keys [account-id region access-key-id secret-access-key]} repository tag-or-digest]
-  (log/infof "get-image-info:  %s@%s/%s %s" region access-key-id tag-or-digest secret-access-key)
+  (log/infof "get-image-info:  %s@%s/%s" region access-key-id tag-or-digest)
   (go-safe
    (let [auth-context (<? (ecr-auth {:region region
                                      :secret-access-key secret-access-key
