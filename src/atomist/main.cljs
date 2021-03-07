@@ -24,7 +24,7 @@
             [atomist.docker :as docker]))
 
 (defn transact-webhook [handler]
-  (fn [{:as request :keys [docker-id] :atomist/keys [ecr-creds]}]
+  (fn [{:as request :keys [account-id region]}]
     (api/trace "transact-webhook")
     (go-safe
      (try
@@ -46,7 +46,7 @@
 
              (<? (api/transact
                   request
-                  (docker/->image-layers-entities "hub.docker.com" repository-name manifest image-tag)))))
+                  (docker/->image-layers-entities (ecr/account-host account-id region) repository-name manifest image-tag)))))
          (<? (handler (assoc request
                              :atomist/status
                              {:code 0
@@ -64,10 +64,11 @@
      (let [params (->> request :subscription :result (map first) (into {}))]
        (log/infof "transact config %s" (dissoc params ""))
        (<? (api/transact request [{:schema/entity-type :docker/registry
-                                   :docker.registry/server-url (gstring/format
-                                                                "registry.hub.docker.com/%s"
-                                                                (get params "namespace" "library"))
-                                   :docker.registry/secret (get params "creds")
+                                   :docker.registry/server-url (ecr/account-host
+                                                                (get params "account-id")
+                                                                (get params "region"))
+                                   :docker.registry.ecr/access-key-id (get params "access-key-id")
+                                   :docker.registry.ecr/secret-key-id (get params "secret-access-key")
                                    :docker.registry/type :docker.registry.type/ECR
                                    :atomist.skill.configuration.capability.provider/name "DockerRegistry"
                                    :atomist.skill.configuration.capability.provider/namespace "atomist"}]))
@@ -90,7 +91,9 @@
          (if (not (digests new-digest))
            (do
              (log/infof "New digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-             (<? (api/transact request (docker/->image-layers-entities "hub.docker.com" repository manifest tag))))
+             (<? (api/transact request (docker/->image-layers-entities 
+                                         (ecr/account-host (:account-id request) (:region request)) 
+                                         repository manifest tag))))
            (log/infof "No new digests for tag %s:%s found" repository tag)))))))
 
 (defn refresh-tags
@@ -103,7 +106,9 @@
        (doseq [manifest manifests
                :let [new-digest (:digest manifest)]]
          (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (docker/->image-layers-entities "hub.docker.com" repository manifest tag))))))))
+         (<? (api/transact request (docker/->image-layers-entities 
+                                     (ecr/account-host (:account-id request) (:region request))  
+                                     repository manifest tag))))))))
 
 (defn refresh-images [handler]
   (fn [request]
