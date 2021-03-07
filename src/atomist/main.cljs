@@ -91,9 +91,9 @@
          (if (not (digests new-digest))
            (do
              (log/infof "New digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-             (<? (api/transact request (docker/->image-layers-entities 
-                                         (ecr/account-host (:account-id request) (:region request)) 
-                                         repository manifest tag))))
+             (<? (api/transact request (docker/->image-layers-entities
+                                        (ecr/account-host (:account-id request) (:region request))
+                                        repository manifest tag))))
            (log/infof "No new digests for tag %s:%s found" repository tag)))))))
 
 (defn refresh-tags
@@ -106,9 +106,9 @@
        (doseq [manifest manifests
                :let [new-digest (:digest manifest)]]
          (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (docker/->image-layers-entities 
-                                     (ecr/account-host (:account-id request) (:region request))  
-                                     repository manifest tag))))))))
+         (<? (api/transact request (docker/->image-layers-entities
+                                    (ecr/account-host (:account-id request) (:region request))
+                                    repository manifest tag))))))))
 
 (defn refresh-images [handler]
   (fn [request]
