@@ -20,12 +20,13 @@
    [cljs.pprint :refer [pprint]]
    [atomist.cljs-log :as log]
    [atomist.async :refer-macros [go-safe <?]]
-   [cljs.core.async :refer [go chan <! >!]]
+   [cljs.core.async :refer [close! go chan <! >!]]
    [clojure.string :as str]
    [atomist.docker :as docker]
    [cljs-node-io.core :as io]
    ["@aws-sdk/client-ecr" :as ecr-service]
    ["aws-sdk" :as aws-sdk]
+   ["tmp" :as tmp]
    [atomist.json :as json]))
 
 (enable-console-print!)
@@ -34,41 +35,69 @@
   [account-id region]
   (gstring/format "%s.dkr.ecr.%s.amazonaws.com" account-id region))
 
+(defn- empty-tmp-dir 
+  "we can only write AWS SDK config to a tmp dir on GCF"
+  []
+  (let [c (chan)]
+    (.dir tmp
+          (clj->js {:keep false :prefix (str "atm-" (. js/process -pid))})
+          (fn [err path]
+            (go
+              (if err
+                (>! c (ex-info "could not create tmp dir" {:err err}))
+                (>! c path))
+              (close! c))))
+    c))
+
+(defn with-close [f]
+  (let [c (chan)]
+    (go
+      (<! c)
+      (try 
+        (log/info "closing " f)
+        (io/delete-file f)
+        (catch :default ex
+          (log/warn "unable to delete " f))))
+    c))
+
 (defn ecr-auth
   [{:keys [region access-key-id secret-access-key]}]
   (go-safe
    (log/infof "Authenticating GCR in region %s" region)
-   (try
+   (let [f (io/file (<? (empty-tmp-dir)) "config.json")]
+     (io/spit f (-> {:region region
+                     :accessKeyId access-key-id
+                     :secretAccessKey secret-access-key
+                     :httpOptions {:timeout 5000 :connectTimeout 5000}
+                     :maxRetries 3}
+                    (json/->str)))
+     (.loadFromPath (.. aws-sdk -config) (.getPath f))
      (let [token-chan (chan)
-           client (new (.-ECRClient ecr-service) #js {:region region
-                                                      :credentials (.. aws-sdk -config -credentials)})]
+           client (new (.-ECRClient ecr-service) (. aws-sdk -config))]
        ;; write to in-memory file-system for GCF and remove when complete
-       (io/spit "creds.json" (-> {:region region
-                                  :accessKeyId access-key-id
-                                  :secretAccessKey secret-access-key}
-                                 (json/->str)))
-       (.loadFromPath (.. aws-sdk -config) "creds.json")
+
+
      ;; Send AWS GetAuthorizationTokenCommand
        (.catch
         (.then
          (.send client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
-         (fn [data] (go (>! token-chan (-> data
-                                           (. -authorizationData)
-                                           (aget 0)
-                                           (. -authorizationToken))))))
-        (fn [err] (go (>! token-chan (ex-info "failed to create token" {:err err})))))
-       {:access-token (<? token-chan)})
-     (catch :default ex
-       (println "inner error " ex)
-       (throw ex))
-     (finally
-       (io/delete-file "creds.json")))))
+         (fn [data] (go
+                      (>! (with-close f) :close)
+                      (>! token-chan (-> data
+                                         (. -authorizationData)
+                                         (aget 0)
+                                         (. -authorizationToken))))))
+        (fn [err] (go
+                    (>! (with-close f) :close)
+                    (>! token-chan (ex-info "failed to create token" {:err err})))))
+       {:access-token (<? token-chan)}))))
 
 (comment
-  (go-safe
+  (println x)
+  (go
    (try
-     (def x (<? (ecr-auth {:access-key-id "xxxxxx"
-                           :secret-access-key "xxxxxxx"
+     (def x (<? (ecr-auth {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
+                           :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
                            :region "us-east-1"})))
      (println "success: " x)
      (catch :default ex
@@ -86,4 +115,15 @@
           (account-host account-id region)
           (:access-token auth-context) repository tag-or-digest)))))
 
+(comment
+  (go-safe
+   (try
+     (println "labelled-manifests:  "
+              (<? (get-labelled-manifests {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
+                                           :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
+                                           :region "us-east-1"
+                                           :account-id "111664719423"}
+                                          "pin-test" "latest")))
+     (catch :default ex
+       (println "error:  " ex)))))
 
