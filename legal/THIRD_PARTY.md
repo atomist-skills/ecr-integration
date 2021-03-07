@@ -15,7 +15,7 @@ This page details all runtime dependencies of `atomist-skill`.
 | [CC0-1.0](#cc0-10)            | 1     |
 | [GPL-2.0](#gpl-20)            | 1     |
 | [ISC](#isc)                   | 21    |
-| [MIT](#mit)                   | 116   |
+| [MIT](#mit)                   | 117   |
 | [UNKNOWN](#unknown)           | 1     |
 
 #### 0BSD
@@ -248,7 +248,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `hash-stream-validation`         | `0.2.4`    | Stephen Sawchuk     | [https://github.com/stephenplusplus/hash-stream-validation](https://github.com/stephenplusplus/hash-stream-validation)                         |
 | `http-proxy-agent`               | `4.0.1`    | Nathan Rajlich      | [https://github.com/TooTallNate/node-http-proxy-agent](https://github.com/TooTallNate/node-http-proxy-agent)                                   |
 | `https-proxy-agent`              | `5.0.0`    | Nathan Rajlich      | [https://github.com/TooTallNate/node-https-proxy-agent](https://github.com/TooTallNate/node-https-proxy-agent)                                 |
-| `iconv-lite`                     | `0.4.19`   | Alexander Shtuchkin | [https://github.com/ashtuchkin/iconv-lite](https://github.com/ashtuchkin/iconv-lite)                                                           |
+| `iconv-lite`                     | `0.4.24`   | Alexander Shtuchkin | [https://github.com/ashtuchkin/iconv-lite](https://github.com/ashtuchkin/iconv-lite)                                                           |
 | `imurmurhash`                    | `0.1.4`    | Jens Taylor         | [https://github.com/jensyt/imurmurhash-js](https://github.com/jensyt/imurmurhash-js)                                                           |
 | `is-extglob`                     | `2.1.1`    | Jon Schlinkert      | [https://github.com/jonschlinkert/is-extglob](https://github.com/jonschlinkert/is-extglob)                                                     |
 | `is-glob`                        | `4.0.1`    | Jon Schlinkert      | [https://github.com/micromatch/is-glob](https://github.com/micromatch/is-glob)                                                                 |
@@ -293,6 +293,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `reusify`                        | `1.0.4`    | Matteo Collina      | [https://github.com/mcollina/reusify](https://github.com/mcollina/reusify)                                                                     |
 | `run-parallel`                   | `1.2.0`    | Feross Aboukhadijeh | [https://github.com/feross/run-parallel](https://github.com/feross/run-parallel)                                                               |
 | `safe-buffer`                    | `5.2.1`    | Feross Aboukhadijeh | [https://github.com/feross/safe-buffer](https://github.com/feross/safe-buffer)                                                                 |
+| `safer-buffer`                   | `2.1.2`    | Nikita Skovoroda    | [https://github.com/ChALkeR/safer-buffer](https://github.com/ChALkeR/safer-buffer)                                                             |
 | `shell-quote`                    | `1.7.2`    | James Halliday      | [https://github.com/substack/node-shell-quote](https://github.com/substack/node-shell-quote)                                                   |
 | `snakecase-keys`                 | `3.2.1`    | Ben Drucker         | [https://github.com/bendrucker/snakecase-keys](https://github.com/bendrucker/snakecase-keys)                                                   |
 | `snakeize`                       | `0.1.0`    | James Halliday      | [https://github.com/nathan7/snakeize](https://github.com/nathan7/snakeize)                                                                     |
