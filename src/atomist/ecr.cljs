@@ -111,6 +111,7 @@
    (let [auth-context (<? (ecr-auth {:region region
                                      :secret-access-key secret-access-key
                                      :access-key-id access-key-id}))]
+     (log/info "auth-context:  %s" auth-context)
      (<? (docker/get-labelled-manifests
           (account-host account-id region)
           (:access-token auth-context) repository tag-or-digest)))))

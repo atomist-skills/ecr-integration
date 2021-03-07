@@ -43,7 +43,7 @@
                                  request
                                  repository-name
                                  image-tag))]
-
+             (log/info "manifest " manifest)
              (<? (api/transact
                   request
                   (docker/->image-layers-entities (ecr/account-host account-id region) repository-name manifest image-tag)))))
