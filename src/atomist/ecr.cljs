@@ -65,7 +65,6 @@
     (go
       (<! c)
       (try
-        (log/info "closing " f)
         (io/delete-file f)
         (catch :default ex
           (log/warn "unable to delete " f))))
@@ -76,34 +75,29 @@
   (go-safe
    (log/infof "Authenticating GCR in region %s" region)
    (let [f (io/file (<? (empty-tmp-dir)) "config.json")]
-     (log/info "write SDK config to " f)
      (io/spit f (-> {:region region
                      :accessKeyId access-key-id
                      :secretAccessKey secret-access-key
                      :httpOptions {:timeout 5000 :connectTimeout 5000}
                      :maxRetries 3}
                     (json/->str)))
-     (log/info "initialize SDK")
      (.loadFromPath (.. aws-sdk -config) (.getPath f))
      (let [token-chan (chan)
            client (new (.-ECRClient ecr-service) (. aws-sdk -config))]
        ;; write to in-memory file-system for GCF and remove when complete
 
-
-       (log/info "call SDK")
      ;; Send AWS GetAuthorizationTokenCommand
        (.catch
         (.then
          (.send client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
          (fn [data] (go
-                      (log/info "data " data)
                       (>! (with-close f) :close)
                       (>! token-chan (-> data
                                          (. -authorizationData)
                                          (aget 0)
                                          (. -authorizationToken))))))
         (fn [err] (go
-                    (log/info "err " err)
+                    (log/warn "err " err)
                     (>! (with-close f) :close)
                     (>! token-chan (ex-info "failed to create token" {:err err})))))
        {:access-token (<? token-chan)}))))
@@ -127,7 +121,6 @@
    (let [auth-context (<? (ecr-auth {:region region
                                      :secret-access-key secret-access-key
                                      :access-key-id access-key-id}))]
-     (log/info "auth-context:  %s" auth-context)
      (<? (docker/get-labelled-manifests
           (account-host account-id region)
           (:access-token auth-context) repository tag-or-digest)))))
