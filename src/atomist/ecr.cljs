@@ -35,7 +35,7 @@
   [account-id region]
   (gstring/format "%s.dkr.ecr.%s.amazonaws.com" account-id region))
 
-(defn- empty-tmp-dir 
+(defn- empty-tmp-dir
   "we can only write AWS SDK config to a tmp dir on GCF"
   []
   (let [c (chan)]
@@ -53,7 +53,7 @@
   (let [c (chan)]
     (go
       (<! c)
-      (try 
+      (try
         (log/info "closing " f)
         (io/delete-file f)
         (catch :default ex
@@ -95,13 +95,13 @@
 (comment
   (println x)
   (go
-   (try
-     (def x (<? (ecr-auth {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
-                           :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
-                           :region "us-east-1"})))
-     (println "success: " x)
-     (catch :default ex
-       (println "error:  " ex)))))
+    (try
+      (def x (<? (ecr-auth {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
+                            :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
+                            :region "us-east-1"})))
+      (println "success: " x)
+      (catch :default ex
+        (println "error:  " ex)))))
 
 (defn get-labelled-manifests
   "log error or return labels"
