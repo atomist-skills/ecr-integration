@@ -77,46 +77,25 @@
                            {:code 0
                             :reason "Updated DockerHub capability"})))))))
 
-(defn refresh-tag
-  "Find new images based on current tag, ingest if digest has changed"
-  [request repository digests tag]
+(defn ingest-latest-tag
+  [{:as request} repository tag]
   (go-safe
-   (let [digests (set digests)]
-     (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
-       (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
-       (doseq [manifest manifests
-               :let [new-digest (:digest manifest)]]
-         (log/debugf "Checking new digest %s" new-digest)
-         (if (not (digests new-digest))
-           (do
-             (log/infof "New digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-             (<? (api/transact request (docker/->image-layers-entities
-                                        (ecr/account-host (:account-id request) (:region request))
-                                        repository manifest tag))))
-           (log/infof "No new digests for tag %s:%s found" repository tag)))))))
-
-(defn refresh-tags
-  [request [image tag]]
-  (go-safe
-   (let [repository (-> image :docker.image/repository :docker.repository/repository)]
-     (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
-       (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
-       (doseq [manifest manifests
-               :let [new-digest (:digest manifest)]]
-         (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (docker/->image-layers-entities
-                                    (ecr/account-host (:account-id request) (:region request))
-                                    repository manifest tag))))))))
+   (log/infof "Fetching latest images for tag %s:%s" repository tag)
+   (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
+     (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
+     (doseq [manifest manifests
+             :let [new-digest (:digest manifest)]]
+       (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
+       (<? (api/transact request (docker/->image-layers-entities "hub.docker.com" repository manifest tag)))))))
 
 (defn refresh-images [handler]
   (fn [request]
     (go-safe
      (try
        (let [images (-> request :subscription :result)]
-         (doseq [image images]
-           (<? (refresh-tags request image)))
+         (doseq [[image tag] images
+                 :let [repository (-> image :docker.image/repository :docker.repository/repository)]]
+           (<? (ingest-latest-tag request repository tag)))
          (<? (handler (assoc request
                              :atomist/status
                              {:code 0
@@ -181,6 +160,25 @@
                 :atomist/status
                 {:code 1
                  :reason (gstring/format "Unexpected error transacting FROM image")}))))))
+
+(defn transact-latest-tag
+  [handler]
+  (fn [request]
+    (go-safe
+     (try
+       (let [repository (-> request :subscription :result first first :docker.repository/repository)
+             tag (-> request :subscription :result first second)]
+         (log/infof "Attempting to ingest latest image for %s:%s" repository tag)
+         (<? (ingest-latest-tag request repository tag))
+         (<? (handler (assoc request :atomist/status
+                             {:code 0
+                              :reason (gstring/format "Ingested latest tag for %s:%s" repository tag)}))))
+       (catch :default ex
+         (log/errorf ex "Failed to transact-from-image")
+         (assoc request
+                :atomist/status
+                {:code 1
+                 :reason (gstring/format "Unexpected error ingesting latest tag")}))))))
 
 (defn transact-from-digest-image
   [handler]
@@ -247,6 +245,9 @@
                          :new-docker-image-from-tag.edn (-> (api/finished)
                                                             (transact-from-tagged-image)
                                                             (api/add-resource-providers))
+
+                         :new-docker-file-without-image.edn (-> (api/finished)
+                                                                (transact-latest-tag))
 
                          :new-docker-image-from-digest.edn (-> (api/finished)
                                                                (transact-from-digest-image)

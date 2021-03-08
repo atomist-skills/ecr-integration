@@ -1,0 +1,16 @@
+[:find
+ (pull ?repository [:docker.repository/host
+                    :docker.repository/repository])
+ ?tag
+ :in $ $before-db %
+ :where
+ (tx-entity-attr-value :docker.file/commits ?docker-file ?commit)
+ ;; no images have arrived for this docker-file yet
+ [?commit :git.commit/sha ?sha]
+ (not [_ :docker.image/sha ?sha])
+ [?from-line :docker.file.line/file ?docker-file]
+ [?from-line :docker.file.line/instruction "FROM"]
+ [?from-line :docker.file.from/repository ?repository]
+ [?repository :docker.repository/host "hub.docker.com"]
+ [?from-line :docker.file.from/tag ?tag]
+ [(missing? $ ?from-line :docker.file.from/digest)]]

@@ -14,21 +14,13 @@
  ;; all base docker images from dockerhub
  [?docker-image :docker.image/sha ?commit-sha]
  [?docker-image :docker.image/from ?base-image]
-
- ;; with the atomist tracking label
-
- [?docker-image :docker.image/labels ?label]
- [?label :docker.image.label/name "com.atomist.follow-tag"]
- [?label :docker.image.label/value ?tag]
+ [?base-image :docker.image/tags ?tag]
 
  [?base-image :docker.image/repository ?repository]
  [?repository :docker.repository/repository _]
  [?repository :docker.repository/host "hub.docker.com"]
 
-
  ;; for which there is a Dockerfile that is pinned on the FROM line
  [?docker-image :docker.image/docker-file ?docker-file]
  [?from-line :docker.file.line/file ?docker-file]
- [?from-line :docker.file.from/repository ?repository]
-
- ]
+ [?from-line :docker.file.from/repository ?repository]]
