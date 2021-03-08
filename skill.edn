@@ -19,7 +19,7 @@
  :description "This section supports markdown"
  :author "atomist"
  :license "unknown"
- :iconUrl "https://images.atomist.com/rug/atomist.png"
+ :iconUrl "https://images.atomist.com/integrations/icons/ecr.png"
  :integration true
  :capabilities
  {:provides
@@ -37,7 +37,34 @@
                 :options
                 [{:description "us-east-1"
                   :value "us-east-1"
-                  :text "us-east-1"}]
+                  :text "us-east-1"}
+                 {:description "us-east-2"
+                  :value "us-east-2"
+                  :text "us-east-2"}
+                 {:description "us-west-1"
+                  :value "us-west-1"
+                  :text "us-west-1"}
+                 {:description "us-west-2"
+                  :value "us-west-2"
+                  :text "us-west-2"}
+                 {:description "ca-central-1"
+                  :value "ca-central-1"
+                  :text "ca-central-1"}
+                 {:description "eu-central-1"
+                  :value "eu-central-1"
+                  :text "eu-central-1"}
+                 {:description "eu-north-1"
+                  :value "eu-north-1"
+                  :text "eu-north-1"}
+                 {:description "eu-west-1"
+                  :value "eu-west-1"
+                  :text "eu-west-1"}
+                 {:description "eu-west-2"
+                  :value "eu-west-2"
+                  :text "eu-west-2"}
+                 {:description "eu-west-3"
+                  :value "eu-west-3"
+                  :text "eu-west-3"}]
                 :required true}}
               {:secret
                {:name "account-id"
