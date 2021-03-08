@@ -19,7 +19,7 @@
  :description "This section supports markdown"
  :author "atomist"
  :license "unknown"
- :iconUrl "https://images.atomist.com/integrations/icons/ecr.png"
+ :iconUrl "https://labs.tadigital.com/wp-content/uploads/2018/07/RCE.png"
  :integration true
  :capabilities
  {:provides
