@@ -14,7 +14,7 @@ This page details all runtime dependencies of `atomist-skill`.
 | [BSD-3-Clause](#bsd-3-clause) | 15    |
 | [CC0-1.0](#cc0-10)            | 1     |
 | [GPL-2.0](#gpl-20)            | 1     |
-| [ISC](#isc)                   | 21    |
+| [ISC](#isc)                   | 20    |
 | [MIT](#mit)                   | 117   |
 | [UNKNOWN](#unknown)           | 1     |
 
@@ -104,7 +104,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opentelemetry/resources`              | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/semantic-conventions`   | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/tracing`                | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                               | `2.858.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                               | `2.859.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `ecdsa-sig-formatter`                   | `1.0.11`  | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
 | `eventid`                               | `1.0.0`   | Google Inc.                 | [https://github.com/google/eventid-js](https://github.com/google/eventid-js)                                                     |
 | `fast-text-encoding`                    | `1.0.3`   | Sam Thorogood               | [https://github.com/samthor/fast-text-encoding](https://github.com/samthor/fast-text-encoding)                                   |
@@ -188,7 +188,6 @@ ISC License - [https://www.isc.org/downloads/software-support-policy/isc-license
 | `once`              | `1.4.0`  | Isaac Z. Schlueter | [https://github.com/isaacs/once](https://github.com/isaacs/once)                         |
 | `rimraf`            | `3.0.2`  | Isaac Z. Schlueter | [https://github.com/isaacs/rimraf](https://github.com/isaacs/rimraf)                     |
 | `sax`               | `1.2.1`  | Isaac Z. Schlueter | [https://github.com/isaacs/sax-js](https://github.com/isaacs/sax-js)                     |
-| `sax`               | `1.2.4`  | Isaac Z. Schlueter | [https://github.com/isaacs/sax-js](https://github.com/isaacs/sax-js)                     |
 | `semver`            | `5.7.1`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
 | `semver`            | `6.3.0`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
 | `semver`            | `7.3.4`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
@@ -325,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.23` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.24` | jim@atomist.com |            |
 
 ## Contact
 
