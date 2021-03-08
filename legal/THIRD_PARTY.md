@@ -177,7 +177,7 @@ ISC License - [https://www.isc.org/downloads/software-support-policy/isc-license
 | ------------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------- |
 | `fastq`             | `1.11.0` | Matteo Collina     | [https://github.com/mcollina/fastq](https://github.com/mcollina/fastq)                   |
 | `fs.realpath`       | `1.0.0`  | Isaac Z. Schlueter | [https://github.com/isaacs/fs.realpath](https://github.com/isaacs/fs.realpath)           |
-| `glob-parent`       | `5.1.1`  | Gulp Team          | [https://github.com/gulpjs/glob-parent](https://github.com/gulpjs/glob-parent)           |
+| `glob-parent`       | `5.1.2`  | Gulp Team          | [https://github.com/gulpjs/glob-parent](https://github.com/gulpjs/glob-parent)           |
 | `glob`              | `7.1.6`  | Isaac Z. Schlueter | [https://github.com/isaacs/node-glob](https://github.com/isaacs/node-glob)               |
 | `graceful-fs`       | `4.2.6`  |                    | [https://github.com/isaacs/node-graceful-fs](https://github.com/isaacs/node-graceful-fs) |
 | `inflight`          | `1.0.6`  | Isaac Z. Schlueter | [https://github.com/npm/inflight](https://github.com/npm/inflight)                       |
@@ -210,7 +210,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `@types/duplexify`               | `3.6.0`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `@types/long`                    | `4.0.1`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `@types/node`                    | `13.13.45` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
-| `@types/node`                    | `14.14.31` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
+| `@types/node`                    | `14.14.32` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `abort-controller`               | `3.0.0`    | Toru Nagashima      | [https://github.com/mysticatea/abort-controller](https://github.com/mysticatea/abort-controller)                                               |
 | `agent-base`                     | `6.0.2`    | Nathan Rajlich      | [https://github.com/TooTallNate/node-agent-base](https://github.com/TooTallNate/node-agent-base)                                               |
 | `argparse`                       | `1.0.10`   |                     | [https://github.com/nodeca/argparse](https://github.com/nodeca/argparse)                                                                       |
@@ -325,7 +325,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.21` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.23` | jim@atomist.com |            |
 
 ## Contact
 
