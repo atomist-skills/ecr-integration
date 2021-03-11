@@ -86,12 +86,7 @@
                 :description "AWS Secret Access Key"
                 :minRequired 1
                 :maxAllowed 1
-                :required true}}
-              {:schedule
-               {:description "Fetch updates to tags in use from Dockerhub",
-                :displayName "Cron Schedule",
-                :name "refresh-tags",
-                :required false}}]
+                :required true}}]
  :artifacts {:gcf
              [{:name "ecr-integration",
                :runtime "nodejs10",

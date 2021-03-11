@@ -80,158 +80,34 @@
 (defn ingest-latest-tag
   [{:as request} repository tag]
   (go-safe
-   (log/infof "Fetching latest images for tag %s:%s" repository tag)
-   (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
-     (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
-     (doseq [manifest manifests
-             :let [new-digest (:digest manifest)]]
-       (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-       (<? (api/transact request (docker/->image-layers-entities "hub.docker.com" repository manifest tag)))))))
-
-(defn refresh-images [handler]
-  (fn [request]
-    (go-safe
-     (try
-       (let [images (-> request :subscription :result)]
-         (doseq [[image tag] images
-                 :let [repository (-> image :docker.image/repository :docker.repository/repository)]]
-           (<? (ingest-latest-tag request repository tag)))
-         (<? (handler (assoc request
-                             :atomist/status
-                             {:code 0
-                              :reason (gstring/format "Refreshed images for %s images" (count images))}))))
-       (catch :default ex
-         (log/errorf ex "Error refreshing images")
-         (<? (handler (assoc request
-                             :atomist/status
-                             {:code 1
-                              :reason (gstring/format "Error refreshing images")}))))))))
-
-(defn transact-from-tagged-image
-  [handler]
-  (fn [{:as request}]
-    (go-safe
-     (try
-       (let [parent-image (-> request :subscription :result first first)
-             parent-image-name (docker/->nice-image-name parent-image)
-             {:docker.file.from/keys [tag repository]} (-> request :subscription :result first second)
-             docker-file (-> request :subscription :result first last)
-             {:docker.repository/keys [repository]} repository
-             parent-image-entity {:schema/entity-type :docker/image
-                                  :schema/entity "$parent-image"
-                                  :docker.image/digest (:docker.image/digest parent-image)
-                                  :docker.image/docker-file "$docker-file"}
-             docker-file-entity {:schema/entity-type :docker/file
-                                 :schema/entity "$docker-file"
-                                 :docker.file/path (:docker.file/path docker-file)
-                                 :docker.file/sha (:docker.file/sha docker-file)}
-             manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))
-             image-str (str repository ":" tag)]
-
-         (if manifests
-           (do
-             (if-let [matching-manifest (docker/matching-image parent-image manifests)]
-               (do
-                 (log/infof "%s - FROM %s found, ingesting..." parent-image-name image-str)
-                 (<? (api/transact request (concat
-                                            (docker/->image-layers-entities "hub.docker.com"
-                                                                            repository
-                                                                            matching-manifest
-                                                                            tag)
-                                            ;; note: we link because it lines up
-                                            (concat [(assoc parent-image-entity :docker.image/from "$docker-image")
-                                                     docker-file-entity]
-                                                    ;; set parent platform if we can
-                                                    (when-let [platform (:platform matching-manifest)]
-                                                      (docker/->platform platform "$parent-image"))))))
-                 (<? (handler (assoc request :atomist/status
-                                     {:code 0
-                                      :reason (gstring/format "%s - FROM link ingested %s" parent-image-name image-str)}))))
-               (<? (handler (assoc request :atomist/status
-                                   {:code 1
-                                    :reason (gstring/format "%s - FROM images (%s) found %s, but layers don't match" parent-image-name (count manifests) image-str)})))))
-           (<? (handler (assoc request :atomist/status
-                               {:code 1
-                                :reason (gstring/format "%s - FROM image not found %s" parent-image-name image-str)})))))
-
-       (catch :default ex
-         (log/errorf ex "Failed to transact-from-image")
-         (assoc request
-                :atomist/status
-                {:code 1
-                 :reason (gstring/format "Unexpected error transacting FROM image")}))))))
+   (let [host (:docker.repository/host repository)
+         repository (:docker.repository/repository repository)]
+     (log/infof "Fetching latest images for tag %s:%s" repository tag)
+     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
+       (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
+       (doseq [manifest manifests
+               :let [new-digest (:digest manifest)]]
+         (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
+         (<? (api/transact request (docker/->image-layers-entities host repository manifest tag))))))))
 
 (defn transact-latest-tag
   [handler]
   (fn [request]
     (go-safe
      (try
-       (let [repository (-> request :subscription :result first first :docker.repository/repository)
-             tag (-> request :subscription :result first second)]
-         (log/infof "Attempting to ingest latest image for %s:%s" repository tag)
-         (<? (ingest-latest-tag request repository tag))
-         (<? (handler (assoc request :atomist/status
-                             {:code 0
-                              :reason (gstring/format "Ingested latest tag for %s:%s" repository tag)}))))
+       (doseq [result (-> request :subscription :result)
+               :let [repository (first result)
+                     tag (last result)]]
+         (<? (ingest-latest-tag request repository tag)))
+       (<? (handler (assoc request :atomist/status
+                           {:code 0
+                            :reason (gstring/format "Ingested latest tags")})))
        (catch :default ex
          (log/errorf ex "Failed to transact-from-image")
          (assoc request
                 :atomist/status
                 {:code 1
                  :reason (gstring/format "Unexpected error ingesting latest tag")}))))))
-
-(defn transact-from-digest-image
-  [handler]
-  (fn [{:as request}]
-    (go-safe
-     (try
-       (let [parent-image (-> request :subscription :result first first)
-             parent-image-name (docker/->nice-image-name parent-image)
-             {:docker.file.from/keys [digest repository]} (-> request :subscription :result first second)
-             docker-file (-> request :subscription :result first last)
-             {:docker.repository/keys [repository]} repository
-             parent-image-entity {:schema/entity-type :docker/image
-                                  :schema/entity "$parent-image"
-                                  :docker.image/digest (:docker.image/digest parent-image)
-                                  :docker.image/docker-file "$docker-file"}
-             docker-file-entity {:schema/entity-type :docker/file
-                                 :schema/entity "$docker-file"
-                                 :docker.file/path (:docker.file/path docker-file)
-                                 :docker.file/sha (:docker.file/sha docker-file)}
-             manifests (not-empty (<? (ecr/get-labelled-manifests request repository digest)))
-             image-str (str repository ":" digest)]
-
-         (if manifests
-           (do
-             (if-let [matching-manifest (docker/matching-image parent-image manifests)]
-               (do
-                 (log/infof "%s - FROM %s found, ingesting..." parent-image-name image-str)
-                 (<? (api/transact request (concat
-                                            (docker/->image-layers-entities "hub.docker.com"
-                                                                            repository
-                                                                            matching-manifest)
-                                            ;; note: we link because it lines up
-                                            (concat [(assoc parent-image-entity :docker.image/from "$docker-image")
-                                                     docker-file-entity]
-                                                    ;; set parent platform if we can
-                                                    (when-let [platform (:platform matching-manifest)]
-                                                      (docker/->platform platform "$parent-image"))))))
-                 (<? (handler (assoc request :atomist/status
-                                     {:code 0
-                                      :reason (gstring/format "%s - FROM link ingested %s" parent-image-name image-str)}))))
-               (<? (handler (assoc request :atomist/status
-                                   {:code 1
-                                    :reason (gstring/format "%s - FROM images (%s) found %s, but layers don't match" parent-image-name (count manifests) image-str)})))))
-           (<? (handler (assoc request :atomist/status
-                               {:code 1
-                                :reason (gstring/format "%s - FROM image not found %s" parent-image-name image-str)})))))
-
-       (catch :default ex
-         (log/errorf ex "Failed to transact-from-image")
-         (assoc request
-                :atomist/status
-                {:code 1
-                 :reason (gstring/format "Unexpected error transacting FROM image")}))))))
 
 (defn ^:export handler
   [data sendreponse]
@@ -242,19 +118,8 @@
        (api/mw-dispatch {:config-change.edn (-> (api/finished)
                                                 (transact-config))
 
-                         :new-docker-image-from-tag.edn (-> (api/finished)
-                                                            (transact-from-tagged-image)
-                                                            (api/add-resource-providers))
-
-                         :new-docker-file-without-image.edn (-> (api/finished)
-                                                                (transact-latest-tag))
-
-                         :new-docker-image-from-digest.edn (-> (api/finished)
-                                                               (transact-from-digest-image)
-                                                               (api/add-resource-providers))
-
-                         :docker-refresh-tags-schedule.edn (-> (api/finished)
-                                                               (refresh-images))
+                         :docker-file-with-unpinned-from.edn (-> (api/finished)
+                                                                 (transact-latest-tag))
 
                          :default (-> (api/finished)
                                       (transact-webhook))})
