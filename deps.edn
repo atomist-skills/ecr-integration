@@ -15,7 +15,7 @@
 {:paths ["src"],
  :deps
  {org.clojure/clojurescript {:mvn/version "1.10.520"},
-  com.atomist/api-cljs #_{:local/root "/Users/slim/atmhq/api-cljs"} {:mvn/version "0.5.23"}},
+  com.atomist/api-cljs #_{:local/root "/Users/slim/atmhq/api-cljs"} {:mvn/version "0.5.29"}},
  :aliases
  {:dev
   {:extra-deps

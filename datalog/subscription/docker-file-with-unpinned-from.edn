@@ -1,9 +1,12 @@
 [:find
  (pull ?repository [:docker.repository/host
                     :docker.repository/repository])
+
+ (pull ?from-line [:docker.file.from/tag
+                   :db/id])
  :in $ $before-db %
  :where
- (tx-entity-attr-value :docker.file/commits ?docker-file ?commit)
+ (tx-entity-attr-value :docker.file/commit ?docker-file ?commit)
  ;; head commits
  [?ref :git.ref/commit ?commit]
  [?ref :git.ref/type :git.ref.type/branch]
@@ -14,5 +17,6 @@
  ;; from related to gcr.io
  [?from-line :docker.file.from/repository ?repository]
  [?repository :docker.repository/host ?host]
- [(atomist.delorean.subscriptions.subscriptions/match #"amazonaws.com" ?host)]
- [?from-line :docker.file.from/tag ?tag]]
+ (string-match ?host ".*" "amazonaws.com" _)
+
+ [?from-line :docker.file.from/tag _]]

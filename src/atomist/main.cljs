@@ -78,27 +78,38 @@
                             :reason "Updated DockerHub capability"})))))))
 
 (defn ingest-latest-tag
-  [{:as request} repository tag]
+  "ingest latest tag in from-line and link this docker image to the from line on this commit's Dockerfile"
+  [{:as request} repository from-line]
   (go-safe
    (let [host (:docker.repository/host repository)
-         repository (:docker.repository/repository repository)]
+         repository (:docker.repository/repository repository)
+         tag (:docker.file.from/tag from-line)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
      (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
        (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
        (doseq [manifest manifests
-               :let [new-digest (:digest manifest)]]
+               :let [new-digest (:digest manifest)
+                     manifest-list? (-> manifest meta :manifest-list boolean)]]
          (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (docker/->image-layers-entities host repository manifest tag))))))))
+         (<? (api/transact request (concat
+                                    (docker/->image-layers-entities host repository manifest tag)
+                                    [(merge {:schema/entity-type :docker.file/line
+                                             :db/id (:db/id from-line)}
+                                            (if manifest-list?
+                                              {:docker.file.from/manifest-list "$manifest-list"}
+                                              {:docker.file.from/image "$docker-image"}))]))))))))
 
 (defn transact-latest-tag
+  "whenever we see a Dockerfile on a branch and it has a FROM that points at an unpinned ECR tag
+   then we make sure the latest tag is ingested, and link the image to the docker file line"
   [handler]
   (fn [request]
     (go-safe
      (try
        (doseq [result (-> request :subscription :result)
                :let [repository (first result)
-                     tag (last result)]]
-         (<? (ingest-latest-tag request repository tag)))
+                     from-line (last result)]]
+         (<? (ingest-latest-tag request repository from-line)))
        (<? (handler (assoc request :atomist/status
                            {:code 0
                             :reason (gstring/format "Ingested latest tags")})))
