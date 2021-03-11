@@ -104,7 +104,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opentelemetry/resources`              | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/semantic-conventions`   | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/tracing`                | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                               | `2.861.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                               | `2.862.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `ecdsa-sig-formatter`                   | `1.0.11`  | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
 | `eventid`                               | `1.0.0`   | Google Inc.                 | [https://github.com/google/eventid-js](https://github.com/google/eventid-js)                                                     |
 | `fast-text-encoding`                    | `1.0.3`   | Sam Thorogood               | [https://github.com/samthor/fast-text-encoding](https://github.com/samthor/fast-text-encoding)                                   |
@@ -112,7 +112,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `gcp-metadata`                          | `4.2.1`   | Stephen Sawchuk             | [https://github.com/googleapis/gcp-metadata](https://github.com/googleapis/gcp-metadata)                                         |
 | `google-auth-library`                   | `6.1.6`   | Google Inc.                 | [https://github.com/googleapis/google-auth-library-nodejs](https://github.com/googleapis/google-auth-library-nodejs)             |
 | `google-auth-library`                   | `7.0.2`   | Google Inc.                 | [https://github.com/googleapis/google-auth-library-nodejs](https://github.com/googleapis/google-auth-library-nodejs)             |
-| `google-gax`                            | `2.10.3`  | Google API Authors          | [https://github.com/googleapis/gax-nodejs](https://github.com/googleapis/gax-nodejs)                                             |
+| `google-gax`                            | `2.11.2`  | Google API Authors          | [https://github.com/googleapis/gax-nodejs](https://github.com/googleapis/gax-nodejs)                                             |
 | `hex2dec`                               | `1.1.2`   |                             | [https://github.com/donmccurdy/hex2dec](https://github.com/donmccurdy/hex2dec)                                                   |
 | `jmespath`                              | `0.15.0`  | James Saryerwinnie          | [https://github.com/jmespath/jmespath.js](https://github.com/jmespath/jmespath.js)                                               |
 | `long`                                  | `4.0.0`   | Daniel Wirtz                | [https://github.com/dcodeIO/long.js](https://github.com/dcodeIO/long.js)                                                         |
@@ -265,7 +265,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `lodash.camelcase`               | `4.3.0`    | John-David Dalton   | [https://github.com/lodash/lodash](https://github.com/lodash/lodash)                                                                           |
 | `lodash.snakecase`               | `4.1.1`    | John-David Dalton   | [https://github.com/lodash/lodash](https://github.com/lodash/lodash)                                                                           |
 | `make-dir`                       | `3.1.0`    | Sindre Sorhus       | [https://github.com/sindresorhus/make-dir](https://github.com/sindresorhus/make-dir)                                                           |
-| `map-obj`                        | `4.1.0`    | Sindre Sorhus       | [https://github.com/sindresorhus/map-obj](https://github.com/sindresorhus/map-obj)                                                             |
+| `map-obj`                        | `4.2.0`    | Sindre Sorhus       | [https://github.com/sindresorhus/map-obj](https://github.com/sindresorhus/map-obj)                                                             |
 | `merge2`                         | `1.4.1`    |                     | [https://github.com/teambition/merge2](https://github.com/teambition/merge2)                                                                   |
 | `micromatch`                     | `4.0.2`    | Jon Schlinkert      | [https://github.com/micromatch/micromatch](https://github.com/micromatch/micromatch)                                                           |
 | `mime-db`                        | `1.46.0`   |                     | [https://github.com/jshttp/mime-db](https://github.com/jshttp/mime-db)                                                                         |
@@ -324,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.25` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.29` | jim@atomist.com |            |
 
 ## Contact
 
