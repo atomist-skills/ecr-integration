@@ -17,4 +17,4 @@ package:
   type: atomist/node-skill
   command: npm ci && npm run skill
   tag: default-branch-only
-bump: 0
+bump: 1
