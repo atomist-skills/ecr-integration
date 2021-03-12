@@ -39,7 +39,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-crypto/sha256-js`                 | `1.1.0`   | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-crypto/supports-web-crypto`       | `1.0.0`   | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-sdk/abort-controller`             | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/client-ecr`                   | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/client-ecr`                   | `3.8.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/client-sso`                   | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/config-resolver`              | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/credential-provider-env`      | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
@@ -57,7 +57,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-sdk/middleware-logger`            | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-retry`             | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-serde`             | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/middleware-signing`           | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/middleware-signing`           | `3.8.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-stack`             | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-user-agent`        | `3.6.1`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/node-config-provider`         | `3.8.0`   | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
@@ -94,7 +94,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@google-cloud/promisify`               | `2.0.3`   | Google Inc.                 | [https://github.com/googleapis/nodejs-promisify](https://github.com/googleapis/nodejs-promisify)                                 |
 | `@google-cloud/pubsub`                  | `2.10.0`  | Google Inc.                 | [https://github.com/googleapis/nodejs-pubsub](https://github.com/googleapis/nodejs-pubsub)                                       |
 | `@google-cloud/storage`                 | `5.8.1`   | Google Inc.                 | [https://github.com/googleapis/nodejs-storage](https://github.com/googleapis/nodejs-storage)                                     |
-| `@grpc/grpc-js`                         | `1.2.10`  | Google Inc.                 | [https://github.com/grpc/grpc-node/tree/master/packages/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) |
+| `@grpc/grpc-js`                         | `1.2.11`  | Google Inc.                 | [https://github.com/grpc/grpc-node/tree/master/packages/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) |
 | `@grpc/proto-loader`                    | `0.5.6`   | Google Inc.                 | [https://github.com/grpc/grpc-node](https://github.com/grpc/grpc-node)                                                           |
 | `@opencensus/core`                      | `0.0.22`  | Google Inc.                 | [https://github.com/census-instrumentation/opencensus-node](https://github.com/census-instrumentation/opencensus-node)           |
 | `@opencensus/propagation-stackdriver`   | `0.0.22`  | OpenCensus Authors          | [https://github.com/census-instrumentation/opencensus-node](https://github.com/census-instrumentation/opencensus-node)           |
@@ -104,7 +104,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opentelemetry/resources`              | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/semantic-conventions`   | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/tracing`                | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                               | `2.862.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                               | `2.863.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `ecdsa-sig-formatter`                   | `1.0.11`  | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
 | `eventid`                               | `1.0.0`   | Google Inc.                 | [https://github.com/google/eventid-js](https://github.com/google/eventid-js)                                                     |
 | `fast-text-encoding`                    | `1.0.3`   | Sam Thorogood               | [https://github.com/samthor/fast-text-encoding](https://github.com/samthor/fast-text-encoding)                                   |
@@ -209,7 +209,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `@types/duplexify`               | `3.6.0`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `@types/long`                    | `4.0.1`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `@types/node`                    | `13.13.46` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
-| `@types/node`                    | `14.14.33` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
+| `@types/node`                    | `14.14.34` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `abort-controller`               | `3.0.0`    | Toru Nagashima      | [https://github.com/mysticatea/abort-controller](https://github.com/mysticatea/abort-controller)                                               |
 | `agent-base`                     | `6.0.2`    | Nathan Rajlich      | [https://github.com/TooTallNate/node-agent-base](https://github.com/TooTallNate/node-agent-base)                                               |
 | `argparse`                       | `1.0.10`   |                     | [https://github.com/nodeca/argparse](https://github.com/nodeca/argparse)                                                                       |
@@ -324,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.29` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.30` | jim@atomist.com |            |
 
 ## Contact
 
