@@ -17,6 +17,6 @@
  ;; from related to gcr.io
  [?from-line :docker.file.from/repository ?repository]
  [?repository :docker.repository/host ?host]
- (string-match ?host ".*" "amazonaws.com" _)
+ (string-match ?host "amazonaws.com" _)
 
  [?from-line :docker.file.from/tag _]]
