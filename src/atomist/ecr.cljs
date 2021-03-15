@@ -127,13 +127,20 @@
 
 (comment
   (go-safe
+   (def y (<? (dockerdocker/get-manifests
+               (account-host (.. js/process -env -ECR_ACCOUNT_ID) "us-east-1")
+               (:access-token x)
+               "base"
+               "latest"))))
+  (println y)
+  (go-safe
    (try
      (println "labelled-manifests:  "
               (<? (get-labelled-manifests {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
                                            :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
                                            :region "us-east-1"
                                            :account-id "111664719423"}
-                                          "pin-test" "latest")))
+                                          "base" "latest")))
      (catch :default ex
        (println "error:  " ex)))))
 
