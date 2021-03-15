@@ -104,7 +104,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opentelemetry/resources`              | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/semantic-conventions`   | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/tracing`                | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                               | `2.863.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                               | `2.864.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `ecdsa-sig-formatter`                   | `1.0.11`  | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
 | `eventid`                               | `1.0.0`   | Google Inc.                 | [https://github.com/google/eventid-js](https://github.com/google/eventid-js)                                                     |
 | `fast-text-encoding`                    | `1.0.3`   | Sam Thorogood               | [https://github.com/samthor/fast-text-encoding](https://github.com/samthor/fast-text-encoding)                                   |
@@ -208,8 +208,8 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `@tootallnate/once`              | `1.1.2`    | Nathan Rajlich      | [https://github.com/TooTallNate/once](https://github.com/TooTallNate/once)                                                                     |
 | `@types/duplexify`               | `3.6.0`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `@types/long`                    | `4.0.1`    |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
-| `@types/node`                    | `13.13.46` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
-| `@types/node`                    | `14.14.34` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
+| `@types/node`                    | `13.13.47` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
+| `@types/node`                    | `14.14.35` |                     | [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)                                       |
 | `abort-controller`               | `3.0.0`    | Toru Nagashima      | [https://github.com/mysticatea/abort-controller](https://github.com/mysticatea/abort-controller)                                               |
 | `agent-base`                     | `6.0.2`    | Nathan Rajlich      | [https://github.com/TooTallNate/node-agent-base](https://github.com/TooTallNate/node-agent-base)                                               |
 | `argparse`                       | `1.0.10`   |                     | [https://github.com/nodeca/argparse](https://github.com/nodeca/argparse)                                                                       |
@@ -324,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.30` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.31` | jim@atomist.com |            |
 
 ## Contact
 
