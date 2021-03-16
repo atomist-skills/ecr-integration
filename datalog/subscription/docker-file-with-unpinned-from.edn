@@ -2,8 +2,7 @@
  (pull ?repository [:docker.repository/host
                     :docker.repository/repository])
 
- (pull ?from-line [:docker.file.from/tag
-                   :db/id])
+ ?tag
  :in $ $before-db %
  :where
  (tx-entity-attr-value :docker.file/commit ?docker-file ?commit)
@@ -19,4 +18,4 @@
  [?repository :docker.repository/host ?host]
  (string-match ?host "amazonaws.com" _)
 
- [?from-line :docker.file.from/tag _]]
+ [?from-line :docker.file.from/tag ?tag]]

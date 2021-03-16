@@ -79,25 +79,17 @@
 
 (defn ingest-latest-tag
   "ingest latest tag in from-line and link this docker image to the from line on this commit's Dockerfile"
-  [{:as request} repository from-line]
+  [{:as request} repository tag]
   (go-safe
    (let [host (:docker.repository/host repository)
-         repository (:docker.repository/repository repository)
-         tag (:docker.file.from/tag from-line)]
+         repository (:docker.repository/repository repository)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
      (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
        (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
        (doseq [manifest manifests
-               :let [new-digest (:digest manifest)
-                     manifest-list? (-> manifest meta :manifest-list boolean)]]
+               :let [new-digest (:digest manifest)]]
          (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (concat
-                                    (docker/->image-layers-entities host repository manifest tag)
-                                    [(merge {:schema/entity-type :docker.file/line
-                                             :db/id (:db/id from-line)}
-                                            (if manifest-list?
-                                              {:docker.file.from/manifest-list "$manifest-list"}
-                                              {:docker.file.from/image "$docker-image"}))]))))))))
+         (<? (api/transact request (docker/->image-layers-entities host repository manifest tag))))))))
 
 (defn transact-latest-tag
   "whenever we see a Dockerfile on a branch and it has a FROM that points at an unpinned ECR tag
@@ -108,11 +100,11 @@
      (try
        (doseq [result (-> request :subscription :result)
                :let [repository (first result)
-                     from-line (last result)]]
-         (<? (ingest-latest-tag request repository from-line)))
+                     tag (last result)]]
+         (<? (ingest-latest-tag request repository tag)))
        (<? (handler (assoc request :atomist/status
                            {:code 0
-                            :reason (gstring/format "Ingested latest tags")})))
+                            :reason (gstring/format "Ingested latest tags used in FROM lines")})))
        (catch :default ex
          (log/errorf ex "Failed to transact-from-image")
          (assoc request
