@@ -104,7 +104,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opentelemetry/resources`              | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/semantic-conventions`   | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
 | `@opentelemetry/tracing`                | `0.12.0`  | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                               | `2.864.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                               | `2.865.0` | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `ecdsa-sig-formatter`                   | `1.0.11`  | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
 | `eventid`                               | `1.0.0`   | Google Inc.                 | [https://github.com/google/eventid-js](https://github.com/google/eventid-js)                                                     |
 | `fast-text-encoding`                    | `1.0.3`   | Sam Thorogood               | [https://github.com/samthor/fast-text-encoding](https://github.com/samthor/fast-text-encoding)                                   |
@@ -324,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.31` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.32` | jim@atomist.com |            |
 
 ## Contact
 
