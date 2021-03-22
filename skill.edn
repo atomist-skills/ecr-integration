@@ -19,7 +19,7 @@
  :description "The ECR integration enables you to pull from and publish to ECR for public or private images."
  :author "atomist"
  :license "unknown"
- :iconUrl "https://labs.tadigital.com/wp-content/uploads/2018/07/RCE.png"
+ :iconUrl "https://raw.githubusercontent.com/atomist-skills/ecr-integration/main/docs/images/icon.svg"
  :integration true
  :capabilities
  {:provides
