@@ -30,7 +30,7 @@
                 :displayName "ECR Push Webhook",
                 :description "Ingest events from Docker Hub"
                 :required false
-                :authorizationTypes ["httpBasic"}}
+                :authorizationTypes ["httpBasic"]}}
               {:singleChoice
                {:name "region"
                 :displayName "AWS Region"
