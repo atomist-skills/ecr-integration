@@ -93,8 +93,8 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@google-cloud/projectify`              | `2.0.1`   | Google Inc.                 | [https://github.com/googleapis/nodejs-projectify](https://github.com/googleapis/nodejs-projectify)                               |
 | `@google-cloud/promisify`               | `2.0.3`   | Google Inc.                 | [https://github.com/googleapis/nodejs-promisify](https://github.com/googleapis/nodejs-promisify)                                 |
 | `@google-cloud/pubsub`                  | `2.10.0`  | Google Inc.                 | [https://github.com/googleapis/nodejs-pubsub](https://github.com/googleapis/nodejs-pubsub)                                       |
-| `@google-cloud/storage`                 | `5.8.1`   | Google Inc.                 | [https://github.com/googleapis/nodejs-storage](https://github.com/googleapis/nodejs-storage)                                     |
-| `@grpc/grpc-js`                         | `1.2.11`  | Google Inc.                 | [https://github.com/grpc/grpc-node/tree/master/packages/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) |
+| `@google-cloud/storage`                 | `5.8.2`   | Google Inc.                 | [https://github.com/googleapis/nodejs-storage](https://github.com/googleapis/nodejs-storage)                                     |
+| `@grpc/grpc-js`                         | `1.2.12`  | Google Inc.                 | [https://github.com/grpc/grpc-node/tree/master/packages/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) |
 | `@grpc/proto-loader`                    | `0.5.6`   | Google Inc.                 | [https://github.com/grpc/grpc-node](https://github.com/grpc/grpc-node)                                                           |
 | `@opencensus/core`                      | `0.0.22`  | Google Inc.                 | [https://github.com/census-instrumentation/opencensus-node](https://github.com/census-instrumentation/opencensus-node)           |
 | `@opencensus/propagation-stackdriver`   | `0.0.22`  | OpenCensus Authors          | [https://github.com/census-instrumentation/opencensus-node](https://github.com/census-instrumentation/opencensus-node)           |
@@ -190,7 +190,7 @@ ISC License - [https://www.isc.org/downloads/software-support-policy/isc-license
 | `sax`               | `1.2.1`  | Isaac Z. Schlueter | [https://github.com/isaacs/sax-js](https://github.com/isaacs/sax-js)                     |
 | `semver`            | `5.7.1`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
 | `semver`            | `6.3.0`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
-| `semver`            | `7.3.4`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
+| `semver`            | `7.3.5`  |                    | [https://github.com/npm/node-semver](https://github.com/npm/node-semver)                 |
 | `signal-exit`       | `3.0.3`  | Ben Coe            | [https://github.com/tapjs/signal-exit](https://github.com/tapjs/signal-exit)             |
 | `wrappy`            | `1.0.2`  | Isaac Z. Schlueter | [https://github.com/npm/wrappy](https://github.com/npm/wrappy)                           |
 | `write-file-atomic` | `3.0.3`  | Rebecca Turner     | [https://github.com/npm/write-file-atomic](https://github.com/npm/write-file-atomic)     |
@@ -284,7 +284,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `pumpify`                        | `2.0.1`    | Mathias Buus        | [https://github.com/mafintosh/pumpify](https://github.com/mafintosh/pumpify)                                                                   |
 | `punycode`                       | `1.3.2`    | Mathias Bynens      | [https://github.com/bestiejs/punycode.js](https://github.com/bestiejs/punycode.js)                                                             |
 | `querystring`                    | `0.2.0`    | Irakli Gozalishvili | [https://github.com/Gozala/querystring](https://github.com/Gozala/querystring)                                                                 |
-| `queue-microtask`                | `1.2.2`    | Feross Aboukhadijeh | [https://github.com/feross/queue-microtask](https://github.com/feross/queue-microtask)                                                         |
+| `queue-microtask`                | `1.2.3`    | Feross Aboukhadijeh | [https://github.com/feross/queue-microtask](https://github.com/feross/queue-microtask)                                                         |
 | `react-native-get-random-values` | `1.6.0`    |                     | [https://github.com/LinusU/react-native-get-random-values](https://github.com/LinusU/react-native-get-random-values)                           |
 | `readable-stream`                | `3.6.0`    |                     | [https://github.com/nodejs/readable-stream](https://github.com/nodejs/readable-stream)                                                         |
 | `retry-request`                  | `4.1.3`    | Stephen Sawchuk     | [https://github.com/stephenplusplus/retry-request](https://github.com/stephenplusplus/retry-request)                                           |
@@ -324,7 +324,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.34` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.35` | jim@atomist.com |            |
 
 ## Contact
 
