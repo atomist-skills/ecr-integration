@@ -76,7 +76,7 @@
               {:secret
                {:name "access-key-id"
                 :displayName "AWS access key ID"
-                :description "Enter an access key ID that has permissions to XXX. Learn more about [AWS access keys](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)."
+                :description "Enter an access key ID that has permissions to access the Elastic Container Registry (an example policy is AmazonEC2ContainerRegistryFullAccess). Learn more about [AWS access keys](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)."
                 :minRequired 1
                 :maxAllowed 1
                 :required true}}
