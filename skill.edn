@@ -26,15 +26,15 @@
   [{:name "DockerRegistry"
     :namespace "atomist"}]}
  :parameters [{:webhook
-               {:name "ecr",
-                :displayName "ECR Push Webhook",
-                :description "Ingest events from Docker Hub"
+               {:name "ecr"
+                :displayName "EventBridge API destination endpoint"
+                :description "Copy this Webhook URL to a new API destination under the [Amazon EventBridge console](https://console.aws.amazon.com/events/home#/apidestinations). Use the Basic authorization type, and choose and enter the same username and password both below and in the Amazon console. Learn more about [creating API destinations in AWS](https://docs.aws.amazon.com/eventbridge/latest/userguide/api-destinations.html)."
                 :required false
                 :authorizationTypes ["httpBasic"]}}
               {:singleChoice
                {:name "region"
-                :displayName "AWS Region"
-                :description "AWS Regtion"
+                :displayName "AWS region"
+                :description "Select the AWS region where your API destination has been created."
                 :options
                 [{:description "us-east-1"
                   :value "us-east-1"
@@ -69,22 +69,22 @@
                 :required true}}
               {:secret
                {:name "account-id"
-                :displayName "AWS Account ID"
-                :description "AWS Account ID"
+                :displayName "AWS account ID"
+                :description "Enter your account ID for AWS. Learn more about [finding your account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)."
                 :minRequired 1
                 :maxAllowed 1
                 :required true}}
               {:secret
                {:name "access-key-id"
-                :displayName "AWS Access Key ID"
-                :description "AWS Access Key ID"
+                :displayName "AWS access key ID"
+                :description "Enter an access key ID that has permissions to access the Elastic Container Registry (an example policy is AmazonEC2ContainerRegistryFullAccess). Learn more about [AWS access keys](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)."
                 :minRequired 1
                 :maxAllowed 1
                 :required true}}
               {:secret
                {:name "secret-access-key"
-                :displayName "AWS Secret Access Key"
-                :description "AWS Secret Access Key"
+                :displayName "AWS secret access key"
+                :description "Enter the corresponding secret access key for the access key ID entered above."
                 :minRequired 1
                 :maxAllowed 1
                 :required true}}]
