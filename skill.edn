@@ -26,10 +26,11 @@
   [{:name "DockerRegistry"
     :namespace "atomist"}]}
  :parameters [{:webhook
-               {:name "ecr",
-                :displayName "EventBridge API destination endpoint",
+               {:name "ecr"
+                :displayName "EventBridge API destination endpoint"
                 :description "Copy this Webhook URL to a new API destination under the [Amazon EventBridge console](https://console.aws.amazon.com/events/home#/apidestinations). Use the Basic authorization type, and choose and enter the same username and password both below and in the Amazon console. Learn more about [creating API destinations in AWS](https://docs.aws.amazon.com/eventbridge/latest/userguide/api-destinations.html)."
-                :required false}}
+                :required false
+                :authorizationTypes ["httpBasic"]}}
               {:singleChoice
                {:name "region"
                 :displayName "AWS region"
