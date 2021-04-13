@@ -85,7 +85,7 @@
          repository (:docker.repository/repository repository)
          tag (:docker.file.from/tag from-line)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (if (docker/private-repo? host repository tag)
+     (if (<? (docker/private-repo? host repository tag))
        (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
          (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
          (doseq [manifest manifests
