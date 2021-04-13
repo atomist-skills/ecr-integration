@@ -1,4 +1,5 @@
 .cpcache
+.lsp
 .shadow-cljs
 index.js
 node_modules

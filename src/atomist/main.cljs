@@ -85,19 +85,21 @@
          repository (:docker.repository/repository repository)
          tag (:docker.file.from/tag from-line)]
      (log/infof "Fetching latest images for tag %s:%s" repository tag)
-     (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
-       (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
-       (doseq [manifest manifests
-               :let [new-digest (:digest manifest)
-                     manifest-list? (-> manifest meta :manifest-list boolean)]]
-         (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
-         (<? (api/transact request (concat
-                                    (docker/->image-layers-entities host repository manifest tag)
-                                    [(merge {:schema/entity-type :docker.file/line
-                                             :db/id (:db/id from-line)}
-                                            (if manifest-list?
-                                              {:docker.file.from/manifest-list "$manifest-list"}
-                                              {:docker.file.from/image "$docker-image"}))]))))))))
+     (if (docker/private-repo? host repository tag)
+       (when-let [manifests (not-empty (<? (ecr/get-labelled-manifests request repository tag)))]
+         (log/infof "Found %s manifests for %s:%s" (count manifests) repository tag)
+         (doseq [manifest manifests
+                 :let [new-digest (:digest manifest)
+                       manifest-list? (-> manifest meta :manifest-list boolean)]]
+           (log/infof "Digest for tag %s:%s platform %s -> %s" repository tag (:platform manifest) new-digest)
+           (<? (api/transact request (concat
+                                      (docker/->image-layers-entities host repository manifest tag)
+                                      [(merge {:schema/entity-type :docker.file/line
+                                               :db/id (:db/id from-line)}
+                                              (if manifest-list?
+                                                {:docker.file.from/manifest-list "$manifest-list"}
+                                                {:docker.file.from/image "$docker-image"}))])))))
+       (log/infof "Repository %s/%s:%s skipped because it isn't private" host repository tag)))))
 
 (defn transact-latest-tag
   "whenever we see a Dockerfile on a branch and it has a FROM that points at an unpinned ECR tag
