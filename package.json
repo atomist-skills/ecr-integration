@@ -11,8 +11,8 @@
   "dependencies": {
     "@atomist/api-cljs": "^0.5.39",
     "@atomist/skill": "^0.9.1",
-    "@aws-sdk/client-ecr": "^3.12.0",
-    "aws-sdk": "^2.887.0",
+    "@aws-sdk/client-ecr": "^3.13.0",
+    "aws-sdk": "^2.888.0",
     "iconv-lite": "^0.4.24",
     "js-yaml": "^3.14.1"
   },
