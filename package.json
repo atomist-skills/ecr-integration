@@ -12,7 +12,7 @@
     "@atomist/api-cljs": "^0.5.39",
     "@atomist/skill": "^0.9.1",
     "@aws-sdk/client-ecr": "^3.13.0",
-    "aws-sdk": "^2.888.0",
+    "aws-sdk": "^2.889.0",
     "iconv-lite": "^0.4.24",
     "js-yaml": "^3.14.1"
   },
