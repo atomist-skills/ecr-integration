@@ -9,7 +9,7 @@ This page details all runtime dependencies of `atomist-skill`.
 | License                         | Count |
 | ------------------------------- | ----- |
 | [0BSD](#0bsd)                   | 4     |
-| [Apache-2.0](#apache-20)        | 94    |
+| [Apache-2.0](#apache-20)        | 93    |
 | [BSD-2-Clause](#bsd-2-clause)   | 10    |
 | [BSD-3-Clause](#bsd-3-clause)   | 24    |
 | [CC-BY-4.0](#cc-by-40)          | 1     |
@@ -42,7 +42,6 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | ------------------------------------------- | ---------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `@atomist/skill-logging`                    | `1.0.4`          | Atomist, Inc.               | [https://github.com/atomist-skills/skill-logging](https://github.com/atomist-skills/skill-logging)                               |
 | `@atomist/skill`                            | `0.10.1-main.36` | Atomist, Inc.               | [https://github.com/atomist-skills/skill](https://github.com/atomist-skills/skill)                                               |
-| `@atomist/skill`                            | `0.11.0`         | Atomist, Inc.               | [https://github.com/atomist-skills/skill](https://github.com/atomist-skills/skill)                                               |
 | `@atomist/slack-messages`                   | `1.2.2`          | Atomist                     | [https://github.com/atomist/slack-messages](https://github.com/atomist/slack-messages)                                           |
 | `@aws-crypto/ie11-detection`                | `1.0.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-crypto/sha256-browser`                | `1.1.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
