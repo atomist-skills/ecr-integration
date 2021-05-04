@@ -9,7 +9,7 @@
     "atm:lint:prettier": "prettier --write"
   },
   "dependencies": {
-    "@atomist/api-cljs": "^0.5.53",
+    "@atomist/api-cljs": "^0.5.55",
     "@aws-sdk/client-ecr": "^3.14.0",
     "aws-sdk": "^2.899.0",
     "iconv-lite": "^0.4.24",
