@@ -40,7 +40,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 
 | Name                                        | Version          | Publisher                   | Repository                                                                                                                       |
 | ------------------------------------------- | ---------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `@atomist/skill-logging`                    | `1.0.5`          | Atomist, Inc.               | [https://github.com/atomist-skills/skill-logging](https://github.com/atomist-skills/skill-logging)                               |
+| `@atomist/skill-logging`                    | `1.0.7`          | Atomist, Inc.               | [https://github.com/atomist-skills/skill-logging](https://github.com/atomist-skills/skill-logging)                               |
 | `@atomist/skill`                            | `0.10.1-main.36` | Atomist, Inc.               | [https://github.com/atomist-skills/skill](https://github.com/atomist-skills/skill)                                               |
 | `@atomist/slack-messages`                   | `1.2.2`          | Atomist                     | [https://github.com/atomist/slack-messages](https://github.com/atomist/slack-messages)                                           |
 | `@aws-crypto/ie11-detection`                | `1.0.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
@@ -228,7 +228,7 @@ ISC License - [https://www.isc.org/downloads/software-support-policy/isc-license
 | `cliui`                     | `6.0.0`   | Ben Coe            | [https://github.com/yargs/cliui](https://github.com/yargs/cliui)                                             |
 | `cliui`                     | `7.0.4`   | Ben Coe            | [https://github.com/yargs/cliui](https://github.com/yargs/cliui)                                             |
 | `deprecation`               | `2.3.1`   |                    | [https://github.com/gr2m/deprecation](https://github.com/gr2m/deprecation)                                   |
-| `electron-to-chromium`      | `1.3.729` | Kilian Valkhof     | [https://github.com/kilian/electron-to-chromium](https://github.com/kilian/electron-to-chromium)             |
+| `electron-to-chromium`      | `1.3.730` | Kilian Valkhof     | [https://github.com/kilian/electron-to-chromium](https://github.com/kilian/electron-to-chromium)             |
 | `fastq`                     | `1.11.0`  | Matteo Collina     | [https://github.com/mcollina/fastq](https://github.com/mcollina/fastq)                                       |
 | `fs.realpath`               | `1.0.0`   | Isaac Z. Schlueter | [https://github.com/isaacs/fs.realpath](https://github.com/isaacs/fs.realpath)                               |
 | `get-caller-file`           | `2.0.5`   | Stefan Penner      | [https://github.com/stefanpenner/get-caller-file](https://github.com/stefanpenner/get-caller-file)           |
@@ -364,7 +364,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `@octokit/auth-token`                                | `2.4.5`        |                                | [https://github.com/octokit/auth-token.js](https://github.com/octokit/auth-token.js)                                                                                                                 |
 | `@octokit/core`                                      | `3.4.0`        |                                | [https://github.com/octokit/core.js](https://github.com/octokit/core.js)                                                                                                                             |
 | `@octokit/endpoint`                                  | `6.0.11`       |                                | [https://github.com/octokit/endpoint.js](https://github.com/octokit/endpoint.js)                                                                                                                     |
-| `@octokit/graphql`                                   | `4.6.1`        |                                | [https://github.com/octokit/graphql.js](https://github.com/octokit/graphql.js)                                                                                                                       |
+| `@octokit/graphql`                                   | `4.6.2`        |                                | [https://github.com/octokit/graphql.js](https://github.com/octokit/graphql.js)                                                                                                                       |
 | `@octokit/openapi-types`                             | `7.0.0`        |                                | [https://github.com/octokit/openapi-types.ts](https://github.com/octokit/openapi-types.ts)                                                                                                           |
 | `@octokit/plugin-paginate-rest`                      | `2.13.3`       |                                | [https://github.com/octokit/plugin-paginate-rest.js](https://github.com/octokit/plugin-paginate-rest.js)                                                                                             |
 | `@octokit/plugin-request-log`                        | `1.0.3`        |                                | [https://github.com/octokit/plugin-request-log.js](https://github.com/octokit/plugin-request-log.js)                                                                                                 |
@@ -562,7 +562,7 @@ MIT License - [https://opensource.org/licenses/MIT](https://opensource.org/licen
 | `graphql-config`                                     | `3.2.0`        | Kamil Kisiela                  | [https://github.com/kamilkisiela/graphql-config](https://github.com/kamilkisiela/graphql-config)                                                                                                     |
 | `graphql-request`                                    | `3.4.0`        | Prisma Labs Team               | [https://github.com/prisma/graphql-request](https://github.com/prisma/graphql-request)                                                                                                               |
 | `graphql-tag`                                        | `2.12.4`       |                                | [https://github.com/apollographql/graphql-tag](https://github.com/apollographql/graphql-tag)                                                                                                         |
-| `graphql-ws`                                         | `4.5.0`        |                                | [https://github.com/enisdenjo/graphql-ws](https://github.com/enisdenjo/graphql-ws)                                                                                                                   |
+| `graphql-ws`                                         | `4.5.1`        |                                | [https://github.com/enisdenjo/graphql-ws](https://github.com/enisdenjo/graphql-ws)                                                                                                                   |
 | `graphql`                                            | `15.5.0`       |                                | [https://github.com/graphql/graphql-js](https://github.com/graphql/graphql-js)                                                                                                                       |
 | `gtoken`                                             | `5.2.1`        | Google, LLC                    | [https://github.com/google/node-gtoken](https://github.com/google/node-gtoken)                                                                                                                       |
 | `handlebars`                                         | `4.7.7`        | Yehuda Katz                    | [https://github.com/wycats/handlebars.js](https://github.com/wycats/handlebars.js)                                                                                                                   |
@@ -895,7 +895,7 @@ Python License 2.0 - [https://opensource.org/licenses/Python-2.0](https://openso
 
 | Name                | Version  | Publisher       | Repository |
 | ------------------- | -------- | --------------- | ---------- |
-| `@atomist/api-cljs` | `0.5.60` | jim@atomist.com |            |
+| `@atomist/api-cljs` | `0.5.61` | jim@atomist.com |            |
 
 ## Contact
 
