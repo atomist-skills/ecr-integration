@@ -1,4 +1,5 @@
 .cpcache
+.calva/
 .lsp
 .shadow-cljs
 index.js

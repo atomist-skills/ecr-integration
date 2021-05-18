@@ -18,8 +18,6 @@
             [atomist.cljs-log :as log]
             [atomist.ecr :as ecr]
             [atomist.json :as json]
-            [cljs.pprint :refer [pprint]]
-            [cljs.tools.reader.edn :as edn]
             [goog.string :as gstring]
             [atomist.docker :as docker]))
 
@@ -72,10 +70,35 @@
                                    :docker.registry/type :docker.registry.type/ECR
                                    :atomist.skill.configuration.capability.provider/name "DockerRegistry"
                                    :atomist.skill.configuration.capability.provider/namespace "atomist"}]))
+       (<? (handler (assoc request :params params)))))))
+
+
+(defn check-auth
+  [{:keys [region access-key-id secret-access-key]}]
+  (go-safe
+   (let [auth-context (<? (ecr/ecr-auth {:region region
+                                         :secret-access-key secret-access-key
+                                         :access-key-id access-key-id}))]
+     {:authenticated? (boolean (:access-token auth-context))})))
+(defn check-config
+  [handler]
+  (fn [request]
+    (go-safe
+   (<? (api/transact request [(api/check-tx "webhook" "Waiting for webhook events" :queued)
+                              (api/check-tx "authentication" "Checking credentials" :in_progress)]))
+     (let [auth (<? (check-auth request))]
+       (log/infof "Auth check result: %s" auth)
+       (<? (api/transact request (cond-> []
+
+                                   (not (:authenticated? auth))
+                                   (conj (api/check-tx "authentication" "Authentication failed" :completed :failure))
+
+                                   (:authenticated? auth)
+                                   (conj (api/check-tx "authentication" "Authentication successful" :completed :success)))))
        (<? (handler (assoc request
                            :atomist/status
                            {:code 0
-                            :reason "Updated DockerHub capability"})))))))
+                            :reason "Updated DockerRegistry capability & and validated credentials"})))))))
 
 (defn ingest-latest-tag
   "ingest latest tag in from-line and link this docker image to the from line on this commit's Dockerfile"
@@ -129,6 +152,7 @@
    sendreponse
    (-> (api/finished)
        (api/mw-dispatch {:config-change.edn (-> (api/finished)
+                                                (check-config)
                                                 (transact-config))
 
                          :docker-file-with-unpinned-from.edn (-> (api/finished)

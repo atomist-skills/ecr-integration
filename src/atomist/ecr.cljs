@@ -26,13 +26,10 @@
 (ns atomist.ecr
   (:require
    [goog.string :as gstring]
-   [http.client :as client]
    [atomist.time]
-   [cljs.pprint :refer [pprint]]
    [atomist.cljs-log :as log]
    [atomist.async :refer-macros [go-safe <?]]
    [cljs.core.async :refer [close! go chan <! >!]]
-   [clojure.string :as str]
    [atomist.docker :as docker]
    [cljs-node-io.core :as io]
    ["@aws-sdk/client-ecr" :as ecr-service]
