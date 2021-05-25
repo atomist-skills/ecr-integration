@@ -9,9 +9,9 @@
     "atm:lint:prettier": "prettier --write"
   },
   "dependencies": {
-    "@atomist/api-cljs": "^0.5.66",
+    "@atomist/api-cljs": "^0.5.67",
     "@aws-sdk/client-ecr": "^3.16.0",
-    "aws-sdk": "^2.913.0",
+    "aws-sdk": "^2.914.0",
     "iconv-lite": "^0.4.24",
     "js-yaml": "^3.14.1"
   },
@@ -22,7 +22,7 @@
     "prettier": "^2.3.0",
     "shadow-cljs": "^2.14.0",
     "source-map-support": "0.5.9",
-    "ws": "^7.4.5"
+    "ws": "^7.4.6"
   },
   "main": "node_modules/@atomist/api-cljs/app.js",
   "husky": {
