@@ -34,7 +34,7 @@
                  :body
                  (json/->obj))]
          (log/infof "ecr event data %s" data)
-         ;; docker hub notifications should be verified before being sent as the webhook can not be verified
+         (<? (api/transact request [(api/check-tx "webhook" "Webhook event received" :completed :success)]))
 
          (when (and repository-name image-tag)
            (doseq [manifest (<? (ecr/get-labelled-manifests
