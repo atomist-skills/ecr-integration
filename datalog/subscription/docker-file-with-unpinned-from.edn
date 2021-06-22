@@ -6,16 +6,7 @@
                    :db/id])
  :in $ $before-db %
  :where
- (or-join [?docker-file ?commit]
-          ;; first push for given blob-sha
-          (and
-           (tx-entity-attr-value :docker.file/git-file ?docker-file ?git-file)
-           [?commit :git.commit/file ?git-file])
-
-          (and
-           ;; subsequent pushes
-           (tx-entity-attr-value :git.commit/file ?commit ?git-file)
-           [?docker-file :docker.file/git-file ?git-file]))
+ (tx-entity-attr-value :docker.file/commit ?docker-file ?commit)
  ;; head commits
  [?ref :git.ref/commit ?commit]
  [?ref :git.ref/type :git.ref.type/branch]
