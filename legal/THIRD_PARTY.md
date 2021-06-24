@@ -8,7 +8,7 @@ This page details all runtime dependencies of `atomist-skill`.
 
 | License                                | Count |
 | -------------------------------------- | ----- |
-| [0BSD](#0bsd)                          | 4     |
+| [0BSD](#0bsd)                          | 5     |
 | [Apache-2.0](#apache-20)               | 92    |
 | [BSD-2-Clause](#bsd-2-clause)          | 11    |
 | [BSD-3-Clause](#bsd-3-clause)          | 24    |
@@ -34,6 +34,7 @@ BSD Zero Clause License - [http://landley.net/toybox/license.html](http://landle
 | `tslib` | `2.0.3`  | Microsoft Corp. | [https://github.com/Microsoft/tslib](https://github.com/Microsoft/tslib) |
 | `tslib` | `2.1.0`  | Microsoft Corp. | [https://github.com/Microsoft/tslib](https://github.com/Microsoft/tslib) |
 | `tslib` | `2.2.0`  | Microsoft Corp. | [https://github.com/Microsoft/tslib](https://github.com/Microsoft/tslib) |
+| `tslib` | `2.3.0`  | Microsoft Corp. | [https://github.com/Microsoft/tslib](https://github.com/Microsoft/tslib) |
 
 #### Apache-2.0
 
@@ -49,17 +50,17 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-crypto/sha256-js`                     | `1.1.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-crypto/supports-web-crypto`           | `1.0.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-sdk/abort-controller`                 | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/client-ecr`                       | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/client-sso`                       | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/client-sts`                       | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/config-resolver`                  | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-env`          | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-imds`         | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-ini`          | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-node`         | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-process`      | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-sso`          | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/credential-provider-web-identity` | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/client-ecr`                       | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/client-sso`                       | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/client-sts`                       | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/config-resolver`                  | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-env`          | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-imds`         | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-ini`          | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-node`         | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-process`      | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-sso`          | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/credential-provider-web-identity` | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/fetch-http-handler`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/hash-node`                        | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/invalid-dependency`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
@@ -67,22 +68,22 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-sdk/middleware-content-length`        | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-host-header`           | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-logger`                | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/middleware-retry`                 | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/middleware-sdk-sts`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/middleware-retry`                 | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/middleware-sdk-sts`               | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-serde`                 | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/middleware-signing`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/middleware-signing`               | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-stack`                 | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/middleware-user-agent`            | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/node-config-provider`             | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/node-config-provider`             | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/node-http-handler`                | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/property-provider`                | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/property-provider`                | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/protocol-http`                    | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/querystring-builder`              | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/querystring-parser`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/service-error-classification`     | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/service-error-classification`     | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/shared-ini-file-loader`           | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/signature-v4`                     | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/smithy-client`                    | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/smithy-client`                    | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/types`                            | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/url-parser`                       | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-base64-browser`              | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
@@ -94,7 +95,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-sdk/util-locate-window`               | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-uri-escape`                  | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-user-agent-browser`          | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
-| `@aws-sdk/util-user-agent-node`             | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/util-user-agent-node`             | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-utf8-browser`                | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-utf8-node`                   | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/util-waiter`                      | `3.18.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
@@ -112,7 +113,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@opencensus/propagation-stackdriver`       | `0.0.22`         | OpenCensus Authors          | [https://github.com/census-instrumentation/opencensus-node](https://github.com/census-instrumentation/opencensus-node)           |
 | `@opentelemetry/api`                        | `0.18.1`         | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js-api](https://github.com/open-telemetry/opentelemetry-js-api)                 |
 | `@opentelemetry/semantic-conventions`       | `0.18.2`         | OpenTelemetry Authors       | [https://github.com/open-telemetry/opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)                         |
-| `aws-sdk`                                   | `2.933.0`        | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
+| `aws-sdk`                                   | `2.934.0`        | Amazon Web Services         | [https://github.com/aws/aws-sdk-js](https://github.com/aws/aws-sdk-js)                                                           |
 | `before-after-hook`                         | `2.2.1`          | Gregor Martynus             | [https://github.com/gr2m/before-after-hook](https://github.com/gr2m/before-after-hook)                                           |
 | `bser`                                      | `2.1.1`          | Wez Furlong                 | [https://github.com/facebook/watchman](https://github.com/facebook/watchman)                                                     |
 | `ecdsa-sig-formatter`                       | `1.0.11`         | D2L Corporation             | [https://github.com/Brightspace/node-ecdsa-sig-formatter](https://github.com/Brightspace/node-ecdsa-sig-formatter)               |
