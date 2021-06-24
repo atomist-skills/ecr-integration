@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@atomist/api-cljs": "^0.5.68",
-    "@aws-sdk/client-ecr": "^3.18.0",
-    "aws-sdk": "^2.933.0",
+    "@aws-sdk/client-ecr": "^3.19.0",
+    "aws-sdk": "^2.934.0",
     "iconv-lite": "^0.4.24",
     "js-yaml": "^3.14.1"
   },
