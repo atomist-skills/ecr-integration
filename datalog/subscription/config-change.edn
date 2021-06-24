@@ -1,4 +1,4 @@
 [:find ?parameter
- :in $ $before-db %
+ :in $ $before-db % ?ctx
  :where
- (tx-config ?parameter)]
+ (config-tx ?ctx ?parameter)]
