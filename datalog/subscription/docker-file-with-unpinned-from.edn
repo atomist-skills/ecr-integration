@@ -6,7 +6,10 @@
                    :db/id])
  :in $ $before-db % ?ctx
  :where
- (attributes-tx ?ctx ?docker-file :docker.file/commit ?commit)
+ (or-join [?ctx ?docker-file ?commit]
+          (attributes-tx ?ctx ?commit :git.commit/file ?docker-file)
+          ;; old way
+          (attributes-tx ?ctx ?docker-file :docker.file/commit ?commit))
  ;; head commits
  [?ref :git.ref/commit ?commit]
  [?ref :git.ref/type :git.ref.type/branch]
