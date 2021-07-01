@@ -39,6 +39,16 @@
 
 (enable-console-print!)
 
+(defn assume-role-request 
+  "not adding SourceIdentity because we won't ask the partner to specific a source identity when they configure their trust policy"
+  []
+  {;; 
+   :ExternalId ""
+   ;; we need to agree on this to avoid the confused deputy attack
+   :RoleArn ""
+   ;; visible to cross-account customers
+   :RoleSessionName "atomist"})
+
 (defn account-host
   [account-id region]
   (gstring/format "%s.dkr.ecr.%s.amazonaws.com" account-id region))
@@ -99,17 +109,6 @@
                     (>! token-chan (ex-info "failed to create token" {:err err})))))
        {:access-token (<? token-chan)}))))
 
-(comment
-  (println x)
-  (go
-    (try
-      (def x (<? (ecr-auth {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
-                            :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
-                            :region "us-east-1"})))
-      (println "success: " x)
-      (catch :default ex
-        (println "error:  " ex)))))
-
 (defn get-labelled-manifests
   "log error or return labels"
   [{:keys [account-id region access-key-id secret-access-key]} repository tag-or-digest]
@@ -121,23 +120,4 @@
      (<? (docker/get-labelled-manifests
           (account-host account-id region)
           (:access-token auth-context) repository tag-or-digest)))))
-
-(comment
-  (go-safe
-   (def y (<? (dockerdocker/get-manifests
-               (account-host (.. js/process -env -ECR_ACCOUNT_ID) "us-east-1")
-               (:access-token x)
-               "base"
-               "latest"))))
-  (println y)
-  (go-safe
-   (try
-     (println "labelled-manifests:  "
-              (<? (get-labelled-manifests {:access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID)
-                                           :secret-access-key (.. js/process -env -ECR_SECRET_ACCESS_KEY)
-                                           :region "us-east-1"
-                                           :account-id "111664719423"}
-                                          "base" "latest")))
-     (catch :default ex
-       (println "error:  " ex)))))
 

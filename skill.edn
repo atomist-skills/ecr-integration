@@ -87,7 +87,14 @@
                 :description "Enter the corresponding secret access key for the access key ID entered above."
                 :minRequired 1
                 :maxAllowed 1
-                :required true}}]
+                :required true}}
+              {:secret
+               {:name "role-arn"
+                :displayName "Trusted Role ARN providing Atomist access to ECR"
+                :description "After creating a trusted role granting Atomist access to ECR, provide the ARN to complete integration"
+                :minRequired 0
+                :maxAllowed 1
+                :required false}}]
  :artifacts {:gcf
              [{:name "ecr-integration",
                :runtime "nodejs10",
