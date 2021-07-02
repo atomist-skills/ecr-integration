@@ -40,6 +40,7 @@
    [atomist.json :as json]))
 
 (enable-console-print!)
+(set! *warn-on-infer* false)
 
 (def third-party-account-id (.. js/process -env -ECR_ACCOUNT_ID))
 (def third-party-arn "arn:aws:iam::111664719423:role/atomist-ecr-integration")
@@ -49,56 +50,76 @@
 (def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
 (enable-console-print!)
 
+(defn from-promise
+  "turn a promise into a channel
+    - channel will emit Promise value and then close
+        - truthy Promise values go through js->clj, which works for primitives and js Objects
+        - non-truthy Promise values are sent as the keyword :done
+        - Promise errors are sent as a map with a {:failure key}"
+  ([promise]
+   (from-promise
+    promise
+    (fn [result] (if result (js->clj result :keywordize-keys true) :done))
+    (fn [error] {:failure error})))
+  ([promise value-handler failure-handler]
+   (let [c (chan)
+         {:keys [async]} (meta value-handler)]
+     (.catch
+      (.then promise (fn [result]
+                       (go (>! c (if async 
+                                   (<! (value-handler result))
+                                   (value-handler result)))
+                           (close! c))))
+      (fn [error]
+        (log/error "promise error:  " error)
+        (go (>! c (failure-handler error))
+            (close! c))))
+     c)))
+
+(defn wrap-error-in-exception [message err]
+  (ex-info message {:err err}))
+
 (defn list-repositories
  "assumes that the AWS sdk is initialized (assumeRole may have already switched roles to third party ECR)" 
   [ecr-client]
-  (let [c (chan)]
-    (.catch
-      (.then
-        (.send ecr-client (new (.-DescribeRepositoriesCommand ecr-service) #js {:registryId third-party-account-id}))
-        (fn [data]
-          (go (>! c (-> (.-repositories data) (js->clj :keywordize-keys true))))))
-      (fn [err]
-        (println "failed to ecr-client " err)
-        (go (>! c (ex-info "failed to DescribeRepositoriesCommand" {:err err})))))
-    c))
+  (from-promise 
+    (.send ecr-client (new (.-DescribeRepositoriesCommand ecr-service) #js {:registryId third-party-account-id}))
+    (fn [data]
+      (-> (.-repositories data) (js->clj :keywordize-keys true)))
+    (partial wrap-error-in-exception "failed to run DescribeRepositoriesCommand")))
 
-(defn assume-role []
-  (go-safe
-   (let [f (io/file "atomist-config.json")]
-     (io/spit f (->
-                 {:region "us-east-1"
-                  :accessKeyId atomist-account-key
-                  :secretAccessKey atomist-secret-key
-                  :httpOptions {:timeout 3 :connectTimeout 5000}
-                  :maxRetries 3}
-                 (json/->str)))
-     (.loadFromPath (.. aws-sdk -config) (.getPath f))
-     (let [token-chan (chan)
-           client (new (.-STSClient sts-service) (. aws-sdk -config))]
-       (.catch
-        (.then
-         (.send client (new (.-AssumeRoleCommand sts-service) #js {:ExternalId "atomist"
-                                                                   :RoleArn third-party-arn
-                                                                   :RoleSessionName "atomist"}))
+(defn assume-role-aws-sdk-service [{:keys [arn external-id]} service-constructor operation]
+  (let [f (io/file "atomist-config.json")]
+    (io/spit f (->
+                {:region "us-east-1"
+                 :accessKeyId atomist-account-key
+                 :secretAccessKey atomist-secret-key
+                 :httpOptions {:timeout 3 :connectTimeout 5000}
+                 :maxRetries 3}
+                (json/->str)))
+    (.loadFromPath (.. aws-sdk -config) (.getPath f))
+    (let [client (new (.-STSClient sts-service) (. aws-sdk -config))]
+      (from-promise
+       (.send client (new (.-AssumeRoleCommand sts-service) #js {:ExternalId external-id
+                                                                 :RoleArn arn
+                                                                 :RoleSessionName "atomist"}))
+     (with-meta
          (fn [data]
-           (go
-             (println "data " data)
-             (>! token-chan (<! (list-repositories
-                                 (new (.-ECR ecr-service)
-                                        #js {:credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
-                                                               :secretAccessKey (.. data -Credentials -SecretAccessKey)
-                                                               :sessionToken (.. data -Credentials -SessionToken)}})))))))
-        (fn [err]
-          (go
-            (println "err " err)
-            (log/error "error:  " err) ()
-            (>! token-chan (ex-info "failed to create token" {:err err})))))
-        (pprint (<? token-chan))))))
+           (operation
+            (new service-constructor 
+                 #js {:credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
+                                        :secretAccessKey (.. data -Credentials -SecretAccessKey)
+                                        :sessionToken (.. data -Credentials -SessionToken)}})))
+         {:async true})
+       (partial wrap-error-in-exception "failed to create token")))))
 
 (comment
   ;; we are querying across accounts here
-  (assume-role)
+  (go (pprint (<! (assume-role-aws-sdk-service 
+                    {:arn third-party-arn
+                     :external-id "atomist"}
+                    (.-ECR ecr-service)
+                    list-repositories))))
   )
 
 (defn account-host
