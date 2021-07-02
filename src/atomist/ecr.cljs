@@ -32,22 +32,74 @@
    [cljs.core.async :refer [close! go chan <! >!]]
    [atomist.docker :as docker]
    [cljs-node-io.core :as io]
+   [cljs.pprint :refer [pprint]]
    ["@aws-sdk/client-ecr" :as ecr-service]
+   ["@aws-sdk/client-sts" :as sts-service]
    ["aws-sdk" :as aws-sdk]
    ["tmp" :as tmp]
    [atomist.json :as json]))
 
 (enable-console-print!)
 
-(defn assume-role-request 
-  "not adding SourceIdentity because we won't ask the partner to specific a source identity when they configure their trust policy"
-  []
-  {;; 
-   :ExternalId ""
-   ;; we need to agree on this to avoid the confused deputy attack
-   :RoleArn ""
-   ;; visible to cross-account customers
-   :RoleSessionName "atomist"})
+(def third-party-account-id (.. js/process -env -ECR_ACCOUNT_ID))
+(def third-party-arn "arn:aws:iam::111664719423:role/atomist-ecr-integration")
+(def third-party-external-id "atomist")
+(def atomist-account-id (.. js/process -env -ASSUME_ROLE_ACCOUNT_ID))
+(def atomist-account-key (.. js/process -env -ASSUME_ROLE_ACCESS_KEY_ID))
+(def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
+(enable-console-print!)
+
+(defn list-repositories
+ "assumes that the AWS sdk is initialized (assumeRole may have already switched roles to third party ECR)" 
+  [ecr-client]
+  (let [c (chan)]
+    (.catch
+      (.then
+        (.send ecr-client (new (.-DescribeRepositoriesCommand ecr-service) #js {:registryId third-party-account-id}))
+        (fn [data]
+          (go (>! c (-> (.-repositories data) (js->clj :keywordize-keys true))))))
+      (fn [err]
+        (println "failed to ecr-client " err)
+        (go (>! c (ex-info "failed to DescribeRepositoriesCommand" {:err err})))))
+    c))
+
+(defn assume-role []
+  (go-safe
+   (let [f (io/file "atomist-config.json")]
+     (io/spit f (->
+                 {:region "us-east-1"
+                  :accessKeyId atomist-account-key
+                  :secretAccessKey atomist-secret-key
+                  :httpOptions {:timeout 3 :connectTimeout 5000}
+                  :maxRetries 3}
+                 (json/->str)))
+     (.loadFromPath (.. aws-sdk -config) (.getPath f))
+     (let [token-chan (chan)
+           client (new (.-STSClient sts-service) (. aws-sdk -config))]
+       (.catch
+        (.then
+         (.send client (new (.-AssumeRoleCommand sts-service) #js {:ExternalId "atomist"
+                                                                   :RoleArn third-party-arn
+                                                                   :RoleSessionName "atomist"}))
+         (fn [data]
+           (go
+             (println "data " data)
+             (>! token-chan (<! (list-repositories
+                                 (new (.-ECR ecr-service)
+                                        #js {:credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
+                                                               :secretAccessKey (.. data -Credentials -SecretAccessKey)
+                                                               :sessionToken (.. data -Credentials -SessionToken)}})))))))
+        (fn [err]
+          (go
+            (println "err " err)
+            (log/error "error:  " err) ()
+            (>! token-chan (ex-info "failed to create token" {:err err})))))
+        (pprint (<? token-chan))))))
+
+(comment
+  ;; we are querying across accounts here
+  (assume-role)
+  )
 
 (defn account-host
   [account-id region]
