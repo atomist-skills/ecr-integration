@@ -33,6 +33,7 @@
    [atomist.docker :as docker]
    [cljs-node-io.core :as io]
    [cljs.pprint :refer [pprint]]
+   [goog.object :as o]
    ["@aws-sdk/client-eventbridge" :as eventbridge]
    ["@aws-sdk/client-ecr" :as ecr-service]
    ["@aws-sdk/client-sts" :as sts-service]
@@ -49,6 +50,11 @@
 (def atomist-account-id (.. js/process -env -ASSUME_ROLE_ACCOUNT_ID))
 (def atomist-access-key-id (.. js/process -env -ASSUME_ROLE_ACCESS_KEY_ID))
 (def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
+(def params-with-arn {:region "us-east-1"
+                      :access-key-id atomist-access-key-id
+                      :secret-access-key atomist-secret-key
+                      :arn third-party-arn
+                      :external-id third-party-external-id})
 (enable-console-print!)
 
 (defn from-promise
@@ -164,8 +170,7 @@
                     :arn third-party-arn
                     :external-id third-party-external-id }
                    (.-ECR ecr-service)
-                   get-authorization-token-command))))
-  )
+                   get-authorization-token-command)))))
 
 (defn account-host
   [account-id region]
@@ -191,6 +196,52 @@
      (<? (docker/get-labelled-manifests
           (account-host account-id region)
           (:access-token auth-context) repository tag-or-digest)))))
+
+(defn event-bridge-command 
+  [operation-constructor params]
+  (call-aws-sdk-service
+   params-with-arn
+   (.-EventBridge eventbridge)
+   (fn [event-bridge-client]
+     (from-promise
+      (.send event-bridge-client
+             (new operation-constructor (clj->js params)))))))
+
+(defn pprint-channel-data [c]
+  (go
+    (pprint
+      (<! c))))
+
+(comment
+  (pprint-channel-data
+    (event-bridge-command
+      (.-ListRulesCommand eventbridge) {:NamePrefix "atomist"})))
+
+(def setup-event-bridge
+  [{[:CreateConnectionCommand
+     :UpdateConnectionCommand
+     :DescribeConnectionCommand] {:Name ""
+                                  :Description ""
+                                  :AuthParameters {:BasicAuthParameters {:Password "" :Username ""}}
+                                  :AuthorizationType "BASIC"}
+    [:CreateApiDestinationCommand
+     :UpdateApiDestinationCommand
+     :DescribeApiDestinationCommand] {:Name ""
+                                      :Description ""
+                                      :InvocationEndpoint ""
+                                      :HttpMethod "POST"
+                                      :ConnectionArn ""}
+    [:PutRuleCommand
+     :ListRulesCommand] {:Name ""
+                         :Description ""
+                         :EventPattern (io/slurp (io/file "resources/event-pattern.json"))
+                         :State "ENABLED"}
+    [:PutTargetsCommand
+     :ListTargetsByRuleCommand] {:Rule ""
+                                 :Targets [{;; for the Api Destination
+                                            :Arn ""
+                                            ;; do we need a RoleArn?  Will it have to have been created already?
+                                            }]}}])
 
 (comment
   ;; first test with the third party creds
