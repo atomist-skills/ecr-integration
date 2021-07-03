@@ -51,10 +51,15 @@
 (def atomist-access-key-id (.. js/process -env -ASSUME_ROLE_ACCESS_KEY_ID))
 (def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
 (def params-with-arn {:region "us-east-1"
+                      :account-id third-party-account-id
                       :access-key-id atomist-access-key-id
                       :secret-access-key atomist-secret-key
                       :arn third-party-arn
                       :external-id third-party-external-id})
+(def params-without-arn
+  {:region "us-east-1"
+   :access-key-id third-party-access-key-id
+   :secret-access-key third-party-secret-key})
 (enable-console-print!)
 
 (defn from-promise
@@ -148,27 +153,17 @@
 (comment
   ;; we are querying across accounts here (using role arn and sts)
   (go (pprint (<! (call-aws-sdk-service
-                   {:region "us-east-1"
-                    :access-key-id atomist-access-key-id
-                    :secret-access-key atomist-secret-key
-                    :arn third-party-arn
-                    :external-id "atomist"}
+                   params-with-arn 
                    (.-ECR ecr-service)
                    list-repositories))))
   ;; use creds to get an auth token
   (go (pprint (<! (call-aws-sdk-service
-                   {:region "us-east-1"
-                    :access-key-id third-party-access-key-id
-                    :secret-access-key third-party-secret-key}
+                   params-without-arn
                    (.-ECR ecr-service)
                    get-authorization-token-command))))
   ;; use role arn and sts to get an auth token
   (go (pprint (<! (call-aws-sdk-service
-                   {:region "us-east-1"
-                    :access-key-id atomist-access-key-id
-                    :secret-access-key atomist-secret-key
-                    :arn third-party-arn
-                    :external-id third-party-external-id }
+                   params-with-arn
                    (.-ECR ecr-service)
                    get-authorization-token-command)))))
 
@@ -212,11 +207,6 @@
     (pprint
       (<! c))))
 
-(comment
-  (pprint-channel-data
-    (event-bridge-command
-      (.-ListRulesCommand eventbridge) {:NamePrefix "atomist"})))
-
 (def setup-event-bridge
   [{[:CreateConnectionCommand
      :UpdateConnectionCommand
@@ -244,15 +234,15 @@
                                             }]}}])
 
 (comment
+  (pprint-channel-data
+   (event-bridge-command
+    (.-ListRulesCommand eventbridge) {:NamePrefix "atomist"}))
   ;; first test with the third party creds
   (go
     (pprint
      (<!
       (get-labelled-manifests
-       {:account-id third-party-account-id
-        :region "us-east-1"
-        :access-key-id third-party-access-key-id
-        :secret-access-key third-party-secret-key}
+       params-without-arn
        "pin-test"
        "sha256:5a703f57de904d1b189df40206458a6e3d9e9526b7bfd94dab8519e1c51b7a0c"))))
 
@@ -261,12 +251,6 @@
     (pprint
      (<!
       (get-labelled-manifests
-       {:account-id third-party-account-id
-        :region "us-east-1"
-        :access-key-id atomist-access-key-id
-        :secret-access-key atomist-secret-key
-        :external-id "atomist"
-        :arn third-party-arn}
+       params-with-arn
        "pin-test"
-       "sha256:5a703f57de904d1b189df40206458a6e3d9e9526b7bfd94dab8519e1c51b7a0c"))))
-  )
+       "sha256:5a703f57de904d1b189df40206458a6e3d9e9526b7bfd94dab8519e1c51b7a0c")))))
