@@ -12,9 +12,15 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-{:attributes 
+{:attributes
  {:docker.registry.ecr/access-key-id {:db/valueType :db.type/string
                                       :db/cardinality :db.cardinality/one}
   :docker.registry.ecr/secret-key-id {:db/valueType :db.type/string
                                       :db/cardinality :db.cardinality/one}}
-  :docker.registry.type/ECR {}}
+ :docker.registry.ecr/arn {:db/valueType :db.type/string
+                           :db/cardinality :db.cardinality/one}
+ :docker.registry.ecr/external-id {:db/valueType :db.type/string
+                                   :db/cardinality :db.cardinality/one}
+ :docker.registry.ecr/region {:db/valueType :db.type/string
+                              :db/cardinality :db.cardinality/one}
+ :docker.registry.type/ECR {}}
