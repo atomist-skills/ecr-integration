@@ -92,7 +92,7 @@
   [{:keys [role-arn external-id access-key-id secret-access-key region]}
    service-constructor
    operation]
-  (let [f (io/file "atomist-config.json")]
+  (let [f (io/file "/tmp/atomist-config.json")]
     (io/spit f (->
                 {:region region
                  :accessKeyId access-key-id
