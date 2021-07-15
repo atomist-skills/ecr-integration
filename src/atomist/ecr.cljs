@@ -43,25 +43,26 @@
 
 (set! *warn-on-infer* false)
 
-(def third-party-account-id (.. js/process -env -ECR_ACCOUNT_ID))
-(def third-party-arn "arn:aws:iam::111664719423:role/atomist-ecr-integration")
-(def third-party-external-id "atomist")
-(def third-party-secret-key (.. js/process -env -ECR_SECRET_ACCESS_KEY))
-(def third-party-access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID))
-(def atomist-account-id (.. js/process -env -ASSUME_ROLE_ACCOUNT_ID))
-(def atomist-access-key-id (.. js/process -env -ASSUME_ROLE_ACCESS_KEY_ID))
-(def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
-(def params-with-arn {:region "us-east-1"
-                      :account-id third-party-account-id
-                      :access-key-id atomist-access-key-id
-                      :secret-access-key atomist-secret-key
-                      :role-arn third-party-arn
-                      :external-id third-party-external-id})
-(def params-without-arn
-  {:region "us-east-1"
-   :access-key-id third-party-access-key-id
-   :secret-access-key third-party-secret-key})
-(enable-console-print!)
+(comment
+  (def third-party-account-id (.. js/process -env -ECR_ACCOUNT_ID))
+  (def third-party-arn "arn:aws:iam::111664719423:role/atomist-ecr-integration")
+  (def third-party-external-id "atomist")
+  (def third-party-secret-key (.. js/process -env -ECR_SECRET_ACCESS_KEY))
+  (def third-party-access-key-id (.. js/process -env -ECR_ACCESS_KEY_ID))
+  (def atomist-account-id (.. js/process -env -ASSUME_ROLE_ACCOUNT_ID))
+  (def atomist-access-key-id (.. js/process -env -ASSUME_ROLE_ACCESS_KEY_ID))
+  (def atomist-secret-key (.. js/process -env -ASSUME_ROLE_SECRET_ACCESS_KEY))
+  (def params-with-arn {:region "us-east-1"
+                        :account-id third-party-account-id
+                        :access-key-id atomist-access-key-id
+                        :secret-access-key atomist-secret-key
+                        :role-arn third-party-arn
+                        :external-id third-party-external-id})
+  (def params-without-arn
+    {:region "us-east-1"
+     :access-key-id third-party-access-key-id
+     :secret-access-key third-party-secret-key})
+  (enable-console-print!))
 
 (defn wrap-error-in-exception [message err]
   (ex-info message {:err err}))
@@ -78,13 +79,14 @@
 (defn get-authorization-token-command
   [ecr-client]
   (promise/from-promise
+    (println "get-authorization-token-command")
    (.send ecr-client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
    (fn [data]
      (-> data
          (. -authorizationData)
          (aget 0)
          (. -authorizationToken)))
-   (partial wrap-error-in-exception "failed to create token")))
+   (partial wrap-error-in-exception "failed to get authorization token command")))
 
 (defn call-aws-sdk-service
   "call aws-sdk v3 operations 
@@ -106,9 +108,10 @@
                                           :secretAccessKey secret-access-key}}))
        (with-meta
          (fn [data]
+           (println "STS data " data)
            (operation
             (new service-constructor
-                 #js {
+                 #js {:region region
                       :credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
                                         :secretAccessKey (.. data -Credentials -SecretAccessKey)
                                         :sessionToken (.. data -Credentials -SessionToken)}})))
