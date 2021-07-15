@@ -9,7 +9,7 @@ This page details all runtime dependencies of `atomist-skill`.
 | License                                | Count |
 | -------------------------------------- | ----- |
 | [0BSD](#0bsd)                          | 5     |
-| [Apache-2.0](#apache-20)               | 92    |
+| [Apache-2.0](#apache-20)               | 93    |
 | [BSD-2-Clause](#bsd-2-clause)          | 11    |
 | [BSD-3-Clause](#bsd-3-clause)          | 24    |
 | [CC-BY-4.0](#cc-by-40)                 | 1     |
@@ -51,6 +51,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 | `@aws-crypto/supports-web-crypto`           | `1.0.0`          | AWS Crypto Tools Team       | [https://github.com/aws/aws-sdk-js-crypto-helpers](https://github.com/aws/aws-sdk-js-crypto-helpers)                             |
 | `@aws-sdk/abort-controller`                 | `3.20.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/client-ecr`                       | `3.21.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
+| `@aws-sdk/client-eventbridge`               | `3.19.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/client-sso`                       | `3.21.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/client-sts`                       | `3.21.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
 | `@aws-sdk/config-resolver`                  | `3.20.0`         | AWS SDK for JavaScript Team | [https://github.com/aws/aws-sdk-js-v3](https://github.com/aws/aws-sdk-js-v3)                                                     |
