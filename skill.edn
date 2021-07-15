@@ -68,24 +68,20 @@
                   :text "eu-west-3"}]
                 :required true}}
               {:string
-               {:name "external-id"
-                :displayName "External ID"
-                :description "random unique string (to avoid confused deputy - can we seed this?)"
-                :required true } }
-              {:secret
-               {:name "account-id"
-                :displayName "AWS account ID"
-                :description "Enter your account ID for AWS. Learn more about [finding your account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)."
-                :minRequired 1
-                :maxAllowed 1
-                :required true}}
-              {:secret
                {:name "role-arn"
                 :displayName "Trusted Role ARN providing Atomist access to ECR"
                 :description "After creating a trusted role granting Atomist access to ECR, provide the ARN to complete integration"
-                :minRequired 0
-                :maxAllowed 1
-                :required false}}]
+                :required true}}
+              {:string
+               {:name "external-id"
+                :displayName "External ID"
+                :description "random unique string (to avoid confused deputy - can we seed this?)"
+                :required true}}
+              {:string
+               {:name "account-id"
+                :displayName "AWS account ID"
+                :description "Enter your account ID for AWS. Learn more about [finding your account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)."
+                :required true}}]
  :artifacts {:gcf
              [{:name "ecr-integration",
                :runtime "nodejs10",
