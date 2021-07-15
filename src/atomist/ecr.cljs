@@ -55,7 +55,7 @@
                       :account-id third-party-account-id
                       :access-key-id atomist-access-key-id
                       :secret-access-key atomist-secret-key
-                      :arn third-party-arn
+                      :role-arn third-party-arn
                       :external-id third-party-external-id})
 (def params-without-arn
   {:region "us-east-1"
@@ -92,38 +92,32 @@
   [{:keys [role-arn external-id access-key-id secret-access-key region]}
    service-constructor
    operation]
-  (let [f (io/file "/tmp/atomist-config.json")]
-    (io/spit f (->
-                {:region region
-                 :accessKeyId access-key-id
-                 :secretAccessKey secret-access-key
-                 :httpOptions {:timeout 3 :connectTimeout 5000}
-                 :maxRetries 3}
-                (json/->str)))
-    (.loadFromPath (.. aws-sdk -config) (.getPath f))
-    (io/delete-file f)
-    (let [client (new (.-STS sts-service) (. aws-sdk -config))]
-      (if (and role-arn external-id)
-        (promise/from-promise
-         (.send client
-                (new (.-AssumeRoleCommand sts-service)
-                     #js {:ExternalId external-id
-                          :RoleArn role-arn
-                          :RoleSessionName "atomist"
-                          :credentials #js {:accessKeyId access-key-id
-                                            :secretAccessKey secret-access-key}}))
-         (with-meta
-           (fn [data]
-             (operation
-              (new service-constructor
-                   #js {:credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
-                                          :secretAccessKey (.. data -Credentials -SecretAccessKey)
-                                          :sessionToken (.. data -Credentials -SessionToken)}})))
-           {:async true})
-         (partial wrap-error-in-exception "failed to create token"))
-        (operation (new service-constructor
-                        #js {:credentials #js {:accessKeyId access-key-id
-                                               :secretAccessKey secret-access-key}}))))))
+  (let [client (new (.-STS sts-service) #js {:region region
+                                             :credentials #js {:accessKeyId access-key-id
+                                                               :secretAccessKey secret-access-key}})]
+    (if (and role-arn external-id)
+      (promise/from-promise
+       (.send client
+              (new (.-AssumeRoleCommand sts-service)
+                   #js {:ExternalId external-id
+                        :RoleArn role-arn
+                        :RoleSessionName "atomist"
+                        :credentials #js {:accessKeyId access-key-id
+                                          :secretAccessKey secret-access-key}}))
+       (with-meta
+         (fn [data]
+           (operation
+            (new service-constructor
+                 #js {
+                      :credentials #js {:accessKeyId (.. data -Credentials -AccessKeyId)
+                                        :secretAccessKey (.. data -Credentials -SecretAccessKey)
+                                        :sessionToken (.. data -Credentials -SessionToken)}})))
+         {:async true})
+       (partial wrap-error-in-exception "failed to create token"))
+      (operation (new service-constructor
+                      #js {:region region
+                           :credentials #js {:accessKeyId access-key-id
+                                             :secretAccessKey secret-access-key}})))))
 
 (comment
   ;; we are querying across accounts here (using role arn and sts)
