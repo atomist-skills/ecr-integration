@@ -122,8 +122,9 @@
                                    :docker.registry/server-url (ecr/account-host
                                                                 (get params "account-id")
                                                                 (get params "region"))
-                                   :docker.registry.ecr/access-key-id (get params "access-key-id")
-                                   :docker.registry.ecr/secret-key-id (get params "secret-access-key")
+                                   ; :docker.registry.ecr/access-key-id (get params "access-key-id")
+                                   ; :docker.registry.ecr/secret-key-id (get params "secret-access-key")
+                                   
                                    :docker.registry/type :docker.registry.type/ECR
                                    :atomist.skill.capability/name "DockerRegistry"
                                    :atomist.skill.capability/namespace "atomist"}]))
