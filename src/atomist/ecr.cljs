@@ -207,31 +207,32 @@
     (pprint
       (<! c))))
 
-(def setup-event-bridge
-  [{[:CreateConnectionCommand
-     :UpdateConnectionCommand
-     :DescribeConnectionCommand] {:Name ""
-                                  :Description ""
-                                  :AuthParameters {:BasicAuthParameters {:Password "" :Username ""}}
-                                  :AuthorizationType "BASIC"}
-    [:CreateApiDestinationCommand
-     :UpdateApiDestinationCommand
-     :DescribeApiDestinationCommand] {:Name ""
-                                      :Description ""
-                                      :InvocationEndpoint ""
-                                      :HttpMethod "POST"
-                                      :ConnectionArn ""}
-    [:PutRuleCommand
-     :ListRulesCommand] {:Name ""
-                         :Description ""
-                         :EventPattern (io/slurp (io/file "resources/event-pattern.json"))
-                         :State "ENABLED"}
-    [:PutTargetsCommand
-     :ListTargetsByRuleCommand] {:Rule ""
-                                 :Targets [{;; for the Api Destination
-                                            :Arn ""
+(comment
+  (def setup-event-bridge
+    [{[:CreateConnectionCommand
+       :UpdateConnectionCommand
+       :DescribeConnectionCommand] {:Name ""
+                                    :Description ""
+                                    :AuthParameters {:BasicAuthParameters {:Password "" :Username ""}}
+                                    :AuthorizationType "BASIC"}
+      [:CreateApiDestinationCommand
+       :UpdateApiDestinationCommand
+       :DescribeApiDestinationCommand] {:Name ""
+                                        :Description ""
+                                        :InvocationEndpoint ""
+                                        :HttpMethod "POST"
+                                        :ConnectionArn ""}
+      [:PutRuleCommand
+       :ListRulesCommand] {:Name ""
+                           :Description ""
+                           :EventPattern (io/slurp (io/file "resources/event-pattern.json"))
+                           :State "ENABLED"}
+      [:PutTargetsCommand
+       :ListTargetsByRuleCommand] {:Rule ""
+                                   :Targets [{;; for the Api Destination
+                                              :Arn ""
                                             ;; do we need a RoleArn?  Will it have to have been created already?
-                                            }]}}])
+                                              }]}}]))
 
 (comment
   (pprint-channel-data
