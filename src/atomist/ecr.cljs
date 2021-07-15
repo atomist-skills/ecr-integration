@@ -29,6 +29,7 @@
    [atomist.time]
    [atomist.cljs-log :as log]
    [atomist.async :refer-macros [go-safe <?]]
+   [atomist.promise :as promise]
    [cljs.core.async :refer [close! go chan <! >!]]
    [atomist.docker :as docker]
    [cljs-node-io.core :as io]
@@ -62,39 +63,13 @@
    :secret-access-key third-party-secret-key})
 (enable-console-print!)
 
-(defn from-promise
-  "turn a promise into a channel
-    - channel will emit Promise value and then close
-        - truthy Promise values go through js->clj, which works for primitives and js Objects
-        - non-truthy Promise values are sent as the keyword :done
-        - Promise errors are sent as a map with a {:failure key}"
-  ([promise]
-   (from-promise
-    promise
-    (fn [result] (if result (js->clj result :keywordize-keys true) :done))
-    (fn [error] {:failure error})))
-  ([promise value-handler failure-handler]
-   (let [c (chan)
-         {:keys [async]} (meta value-handler)]
-     (.catch
-      (.then promise (fn [result]
-                       (go (>! c (if async 
-                                   (<! (value-handler result))
-                                   (value-handler result)))
-                           (close! c))))
-      (fn [error]
-        (log/error "promise error:  " error)
-        (go (>! c (failure-handler error))
-            (close! c))))
-     c)))
-
 (defn wrap-error-in-exception [message err]
   (ex-info message {:err err}))
 
 (defn list-repositories
  "assumes that the AWS sdk is initialized (assumeRole may have already switched roles to third party ECR)" 
   [ecr-client]
-  (from-promise 
+  (promise/from-promise 
     (.send ecr-client (new (.-DescribeRepositoriesCommand ecr-service) #js {:registryId third-party-account-id}))
     (fn [data]
       (-> (.-repositories data) (js->clj :keywordize-keys true)))
@@ -102,7 +77,7 @@
 
 (defn get-authorization-token-command
   [ecr-client]
-  (from-promise
+  (promise/from-promise
    (.send ecr-client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
    (fn [data]
      (-> data
@@ -114,7 +89,7 @@
 (defn call-aws-sdk-service
   "call aws-sdk v3 operations 
      - may use STS to assume role if there is an arn present.  Otherwise, default to use creds without STS"
-  [{:keys [arn external-id access-key-id secret-access-key region]}
+  [{:keys [role-arn external-id access-key-id secret-access-key region]}
    service-constructor
    operation]
   (let [f (io/file "atomist-config.json")]
@@ -128,12 +103,12 @@
     (.loadFromPath (.. aws-sdk -config) (.getPath f))
     (io/delete-file f)
     (let [client (new (.-STS sts-service) (. aws-sdk -config))]
-      (if (and arn external-id)
-        (from-promise
+      (if (and role-arn external-id)
+        (promise/from-promise
          (.send client
                 (new (.-AssumeRoleCommand sts-service)
                      #js {:ExternalId external-id
-                          :RoleArn arn
+                          :RoleArn role-arn
                           :RoleSessionName "atomist"
                           :credentials #js {:accessKeyId access-key-id
                                             :secretAccessKey secret-access-key}}))
@@ -175,7 +150,7 @@
   "get an ecr authorization token"
   [{:keys [region] :as params}]
   (go-safe
-   (log/infof "Authenticating GCR in region %s" region)
+   (log/infof "Authenticating ECR in region %s" region)
    {:access-token
     (<? (call-aws-sdk-service
          params
@@ -198,7 +173,7 @@
    params-with-arn
    (.-EventBridge eventbridge)
    (fn [event-bridge-client]
-     (from-promise
+     (promise/from-promise
       (.send event-bridge-client
              (new operation-constructor (clj->js params)))))))
 

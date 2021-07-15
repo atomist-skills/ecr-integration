@@ -216,7 +216,8 @@
           (<? (handler (assoc request
                               :access-key-id accessKeyId
                               :secret-access-key secretAccessKey))))
-        (catch :default _ 
+        (catch :default ex
+          (log/errorf ex "unable to authenticate ECR %s" (str ex))
           (assoc request :atomist/status 
                  {:code 1 :reason "unable to authenticate ECR"}))))))
 
