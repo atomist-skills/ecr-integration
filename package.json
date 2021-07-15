@@ -9,15 +9,15 @@
     "atm:lint:prettier": "prettier --write"
   },
   "dependencies": {
-    "@atomist/api-cljs": "^0.5.68",
+    "@atomist/api-cljs": "^0.5.76",
     "@aws-sdk/client-ecr": "^3.21.0",
-    "aws-sdk": "^2.945.0",
     "@aws-sdk/client-eventbridge": "^3.19.0",
+    "aws-sdk": "^2.945.0",
     "iconv-lite": "^0.4.24",
     "js-yaml": "^3.14.1"
   },
   "devDependencies": {
-    "@atomist/skill-bundler": "^0.1.28",
+    "@atomist/skill-bundler": "^0.1.35",
     "husky": "^4.3.5",
     "lint-staged": "^10.5.4",
     "prettier": "^2.3.2",
