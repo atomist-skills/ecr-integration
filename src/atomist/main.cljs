@@ -119,7 +119,7 @@
   (fn [request]
     (go-safe
      (let [params (->> request :subscription :result (map first) (into {}))]
-       (log/infof "transact config %s" (dissoc params ""))
+       (log/infof "transact config %s" params)
        (<? (api/transact request [{:schema/entity-type :docker/registry
                                    :docker.registry/server-url (ecr/account-host
                                                                 (get params "account-id")
@@ -142,8 +142,8 @@
   [handler]
   (fn [request]
     (go-safe
-   (<? (api/transact request [(api/check-tx "webhook" "Waiting for webhook events" :queued)
-                              (api/check-tx "authentication" "Checking credentials" :in_progress)]))
+     (<? (api/transact request [(api/check-tx "webhook" "Waiting for webhook events" :queued)
+                                (api/check-tx "authentication" "Checking credentials" :in_progress)]))
      (let [auth (<? (check-auth request))]
        (log/infof "Auth check result: %s" auth)
        (<? (api/transact request (cond-> []

@@ -79,9 +79,9 @@
 (defn get-authorization-token-command
   [ecr-client]
   (promise/from-promise
-    (println "get-authorization-token-command")
    (.send ecr-client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
    (fn [data]
+     (log/info "ECR data " data)
      (-> data
          (. -authorizationData)
          (aget 0)
@@ -108,7 +108,7 @@
                                           :secretAccessKey secret-access-key}}))
        (with-meta
          (fn [data]
-           (println "STS data " data)
+           (log/info "STS data " data)
            (operation
             (new service-constructor
                  #js {:region region
