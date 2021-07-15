@@ -67,6 +67,11 @@
                   :value "eu-west-3"
                   :text "eu-west-3"}]
                 :required true}}
+              {:string
+               {:name "external-id"
+                :displayName "External ID"
+                :description "random unique string (to avoid confused deputy - can we seed this?)"
+                :required true } }
               {:secret
                {:name "account-id"
                 :displayName "AWS account ID"
