@@ -15,10 +15,12 @@
 (ns atomist.main
   (:require [atomist.api :as api]
             [atomist.async :refer-macros [<? go-safe]]
+            [cljs.core.async :refer-macros [go]]
             [atomist.cljs-log :as log]
             [atomist.ecr :as ecr]
             [atomist.json :as json]
             [goog.string :as gstring]
+            [atomist.gcp :as gcp]
             [atomist.docker :as docker]))
 
 (defn transact-environment-digest [handler]
@@ -129,7 +131,6 @@
                                    :atomist.skill.capability/namespace "atomist"}]))
        (<? (handler (assoc request :params params)))))))
 
-
 (defn check-auth
   [{:keys [region access-key-id secret-access-key]}]
   (go-safe
@@ -202,6 +203,23 @@
                 {:code 1
                  :reason (gstring/format "Unexpected error ingesting latest tag")}))))))
 
+(defn add-assume-role-creds
+  "get Atomist AWS creds - these are the creds we'll use to call AssumeRole
+    these are not the temporary creds with access to third-party resources."
+  [handler]
+  (fn [request]
+    (go
+      (try
+        (let [aws-assume-role-secret (<? (gcp/get-secret "aws-assume-role-creds" (<? (gcp/workload-identity))))
+              {:keys [accessKeyId secretAccessKey]} (json/->obj aws-assume-role-secret)]
+          (log/info "accessKeyId " accessKeyId)
+          (<? (handler (assoc request
+                              :access-key-id accessKeyId
+                              :secret-access-key secretAccessKey))))
+        (catch :default _ 
+          (assoc request :atomist/status 
+                 {:code 1 :reason "unable to authenticate ECR"}))))))
+
 (defn ^:export handler
   [data sendreponse]
   (api/make-request
@@ -213,13 +231,13 @@
                                                 (transact-config))
 
                          :new-missing-private-image-in-environment.edn (-> (api/finished)
-                                                                           (transact-environment-digest))
-
+                                                                           (transact-environment-digest)) 
                          :docker-file-with-unpinned-from.edn (-> (api/finished)
                                                                  (transact-latest-tag))
 
                          :default (-> (api/finished)
                                       (transact-webhook))})
+       (add-assume-role-creds)
        (api/add-skill-config)
        (api/log-event)
        (api/status))))
