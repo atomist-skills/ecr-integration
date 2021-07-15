@@ -21,6 +21,63 @@
             [goog.string :as gstring]
             [atomist.docker :as docker]))
 
+(defn transact-environment-digest [handler]
+  (fn [{:as request :atomist/keys [access-token]}]
+    (api/trace "transact-environment-digest")
+    (go-safe
+     (try
+       (let [[{id :db/id
+               digest :image.recorded/digest
+               :deployment.stream/keys [name appname]
+               [tag] :docker.image/tags
+               {host :docker.repository/host
+                repository-name :docker.repository/repository} :deployment.image/repository}]
+             (-> request :subscription :result first)]
+         (log/infof "attempt to link %s@%s in environent %s/%s"
+                    repository-name digest name appname)
+         (if-let [manifests (not-empty (<? (ecr/get-labelled-manifests 
+                                             request
+                                             repository-name
+                                             digest)))]
+           (do
+             (doseq [manifest manifests]
+               (<? (api/transact
+                    request
+                    (docker/->image-layers-entities "hub.docker.com" repository-name manifest tag))))
+             (<? (api/transact request
+                               [{:schema/entity-type :docker/image
+                                 :schema/entity "$image"
+                                 :docker.image/digest digest}
+                                {:db/id id
+                                 :schema/entity-type :deployment/stream
+                                 :deployment.stream/image "$image"
+                                 :image.recorded/status :image.recorded.status/verified}]))
+             (<? (handler (assoc request
+                                 :atomist/status
+                                 {:code 0
+                                  :reason (gstring/format
+                                           "transact missing digest %s@%s in environment for %s:%s"
+                                           repository-name digest
+                                           name appname)}))))
+           (do
+             (<? (api/transact request
+                               [{:db/id id
+                                 :schema/entity-type :deployment/stream
+                                 :image.recorded/status :image.recorded.status/missing}]))
+             (<? (handler (assoc request
+                                 :atomist/status
+                                 {:code 1
+                                  :reason (gstring/format
+                                           "digest %s@%s not found for environment for %s:%s"
+                                           repository-name digest
+                                           name appname)}))))))
+       (catch :default ex
+         (log/errorf ex "failed to transact")
+         (assoc request
+                :atomist/status
+                {:code 1
+                 :reason (gstring/format "failed to transact environment with unlinked private image:  %s" (str ex))}))))))
+
 (defn transact-webhook [handler]
   (fn [{:as request :keys [account-id region]}]
     (api/trace "transact-webhook")
@@ -65,9 +122,9 @@
                                    :docker.registry/server-url (ecr/account-host
                                                                 (get params "account-id")
                                                                 (get params "region"))
-                                   :docker.registry.ecr/access-key-id (get params "access-key-id")
-                                   :docker.registry.ecr/secret-key-id (get params "secret-access-key")
                                    :docker.registry/type :docker.registry.type/ECR
+                                   :docker.registry.ecr/arn (get params "role-arn")
+                                   :docker.registry.ecr/external-id (get params "external-id")
                                    :atomist.skill.capability/name "DockerRegistry"
                                    :atomist.skill.capability/namespace "atomist"}]))
        (<? (handler (assoc request :params params)))))))
@@ -154,6 +211,9 @@
        (api/mw-dispatch {:config-change.edn (-> (api/finished)
                                                 (check-config)
                                                 (transact-config))
+
+                         :new-missing-private-image-in-environment.edn (-> (api/finished)
+                                                                           (transact-environment-digest))
 
                          :docker-file-with-unpinned-from.edn (-> (api/finished)
                                                                  (transact-latest-tag))

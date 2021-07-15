@@ -1,0 +1,16 @@
+[:find
+ (pull ?environment [:db/id
+                     :image.recorded/digest
+                     :deployment.stream/name
+                     :deployment.stream/appname
+                     {:docker.image/repository
+                      [:docker.repository/host
+                       :docker.repository/repository]}])
+ :in $ $before-db %
+ :where
+ (tx-entity-attr-value :deployment.stream/status ?environment ?status)
+ [?environment :deployment.stream/status :image.recorded.status/private-registry]
+ [?environment :docker.image/repository ?repository]
+ [?repository :docker.repository/host ?host]
+ (string-match ?host "amazonaws.com" _)
+ ]

@@ -1,0 +1,13 @@
+parameter_groups:
+  - name: account-creds
+    display_name: AWS Credentials
+  - name: third-party-access
+    display_name: AWS AssumeRole Details for third-party access
+
+parameters:
+  - name: access-key-id
+    group: account-creds
+  - name: secret-access-key
+    group: account-creds
+  - name: role-arn
+    group: third-party-access
