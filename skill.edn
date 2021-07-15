@@ -73,7 +73,11 @@
                 :description "After creating a trusted role granting Atomist access to ECR, provide the ARN to complete integration"
                 :required true}}
               {:string
-               {:name "external-id"
+               {:name "external-{:string
+               {:name "account-id"
+                :displayName "AWS account ID"
+                :description "Enter your account ID for AWS. Learn more about [finding your account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)."
+                :required true}}id"
                 :displayName "External ID"
                 :description "random unique string (to avoid confused deputy - can we seed this?)"
                 :required true}}
@@ -81,6 +85,20 @@
                {:name "account-id"
                 :displayName "AWS account ID"
                 :description "Enter your account ID for AWS. Learn more about [finding your account ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#FindingYourAWSId)."
+                :required true}}
+              {:secret
+               {:name "access-key-id"
+                :displayName "Atomist Access Key Id"
+                :description "TODO remove"
+                :minRequired 1
+                :maxAllowed 1
+                :required true}}
+              {:secret
+               {:name "secret-access-key"
+                :displayName "Atomist Secret Key Id"
+                :description "TODO remove"
+                :minRequired 1
+                :maxAllowed 1
                 :required true}}]
  :artifacts {:gcf
              [{:name "ecr-integration",
