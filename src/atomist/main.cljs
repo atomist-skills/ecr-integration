@@ -95,19 +95,25 @@
          (log/infof "ecr event data %s" data)
          (<? (api/transact request [(api/check-tx "webhook" "Webhook event received" :completed :success)]))
 
-         (when (and repository-name image-tag)
-           (doseq [manifest (<? (ecr/get-labelled-manifests
-                                 request
-                                 repository-name
-                                 image-tag))]
-             (log/info "transact manifest " manifest)
-             (<? (api/transact
-                  request
-                  (docker/->image-layers-entities (ecr/account-host account-id region) repository-name manifest image-tag)))))
-         (<? (handler (assoc request
-                             :atomist/status
-                             {:code 0
-                              :reason (gstring/format "transact webhook for %s/%s" repository-name image-tag)}))))
+         (if (and repository-name image-tag)
+           (do
+             (doseq [manifest (<? (ecr/get-labelled-manifests
+                                   request
+                                   repository-name
+                                   image-tag))]
+               (log/info "transact manifest " manifest)
+               (<? (api/transact
+                    request
+                    (docker/->image-layers-entities (ecr/account-host account-id region) repository-name manifest image-tag))))
+             (<? (handler (assoc request
+                                 :atomist/status
+                                 {:code 0
+                                  :reason (gstring/format "transact webhook for %s/%s" repository-name image-tag)}))))
+           (<? (handler (assoc request
+                               :atomist/status
+                               {:code 0
+                                :visibility :hidden
+                                :reason (gstring/format "skipping ecr event %s" (:detail-type data))})))))
        (catch :default ex
          (log/errorf ex "failed to transact")
          (assoc request
@@ -127,6 +133,7 @@
                                    :docker.registry/type :docker.registry.type/ECR
                                    :docker.registry.ecr/arn (get params "role-arn")
                                    :docker.registry.ecr/external-id (get params "external-id")
+                                   :docker.registry.ecr/region (get params "region")
                                    :atomist.skill.capability/name "DockerRegistry"
                                    :atomist.skill.capability/namespace "atomist"}]))
        (<? (handler (assoc request :params params)))))))
