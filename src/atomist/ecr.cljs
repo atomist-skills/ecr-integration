@@ -81,7 +81,6 @@
   (promise/from-promise
    (.send ecr-client (new (.-GetAuthorizationTokenCommand ecr-service) #js {}))
    (fn [data]
-     (log/info "ECR data " data)
      (-> data
          (. -authorizationData)
          (aget 0)

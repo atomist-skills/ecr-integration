@@ -132,11 +132,9 @@
        (<? (handler (assoc request :params params)))))))
 
 (defn check-auth
-  [{:keys [region access-key-id secret-access-key]}]
+  [{:keys [region access-key-id secret-access-key] :as params}]
   (go-safe
-   (let [auth-context (<? (ecr/ecr-auth {:region region
-                                         :secret-access-key secret-access-key
-                                         :access-key-id access-key-id}))]
+   (let [auth-context (<? (ecr/ecr-auth params))]
      {:authenticated? (boolean (:access-token auth-context))})))
 (defn check-config
   [handler]
