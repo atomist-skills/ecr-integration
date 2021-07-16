@@ -69,7 +69,7 @@
 
 (defn list-repositories
  "assumes that the AWS sdk is initialized (assumeRole may have already switched roles to third party ECR)" 
-  [ecr-client]
+  [third-party-account-id ecr-client]
   (promise/from-promise 
     (.send ecr-client (new (.-DescribeRepositoriesCommand ecr-service) #js {:registryId third-party-account-id}))
     (fn [data]
@@ -108,7 +108,6 @@
                                           :secretAccessKey secret-access-key}}))
        (with-meta
          (fn [data]
-           (log/info "STS data " data)
            (operation
             (new service-constructor
                  #js {:region region
@@ -127,7 +126,7 @@
   (go (pprint (<! (call-aws-sdk-service
                    params-with-arn 
                    (.-ECR ecr-service)
-                   list-repositories))))
+                   (partial list-repositories third-party-account-id)))))
   ;; use creds to get an auth token
   (go (pprint (<! (call-aws-sdk-service
                    params-without-arn
@@ -167,7 +166,7 @@
 (defn event-bridge-command 
   [operation-constructor params]
   (call-aws-sdk-service
-   params-with-arn
+   params
    (.-EventBridge eventbridge)
    (fn [event-bridge-client]
      (promise/from-promise
